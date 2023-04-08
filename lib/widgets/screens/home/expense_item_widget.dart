@@ -23,12 +23,15 @@ class ExpenseItemWidget extends StatelessWidget {
               expense.title,
               style: Theme.of(context)
                   .textTheme
-                  .bodySmall
+                  .labelLarge
                   ?.copyWith(fontWeight: FontWeight.w600),
             ),
             Text(
               expense.category.displayName,
-              style: Theme.of(context).textTheme.labelMedium,
+              style: Theme.of(context)
+                  .textTheme
+                  .labelMedium
+                  ?.copyWith(color: const Color.fromARGB(255, 140, 140, 140)),
             ),
           ],
         ),

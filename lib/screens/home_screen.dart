@@ -26,6 +26,66 @@ class _HomeScreenState extends State<HomeScreen> {
         amount: 22000,
         date: DateTime.now(),
         category: CategoryType.dailyNeeds),
+    Expense(
+        id: 1,
+        title: 'Nasi Kuning',
+        amount: 10000,
+        date: DateTime.now(),
+        category: CategoryType.foodAndDrink),
+    Expense(
+        id: 2,
+        title: 'Laundry',
+        amount: 22000,
+        date: DateTime.now(),
+        category: CategoryType.dailyNeeds),
+    Expense(
+        id: 1,
+        title: 'Nasi Kuning',
+        amount: 10000,
+        date: DateTime.now(),
+        category: CategoryType.foodAndDrink),
+    Expense(
+        id: 2,
+        title: 'Laundry',
+        amount: 22000,
+        date: DateTime.now(),
+        category: CategoryType.dailyNeeds),
+    Expense(
+        id: 1,
+        title: 'Nasi Kuning',
+        amount: 10000,
+        date: DateTime.now(),
+        category: CategoryType.foodAndDrink),
+    Expense(
+        id: 2,
+        title: 'Laundry',
+        amount: 22000,
+        date: DateTime.now(),
+        category: CategoryType.dailyNeeds),
+    Expense(
+        id: 1,
+        title: 'Nasi Kuning',
+        amount: 10000,
+        date: DateTime.now(),
+        category: CategoryType.foodAndDrink),
+    Expense(
+        id: 2,
+        title: 'Laundry',
+        amount: 22000,
+        date: DateTime.now(),
+        category: CategoryType.dailyNeeds),
+    Expense(
+        id: 1,
+        title: 'Nasi Kuning',
+        amount: 10000,
+        date: DateTime.now(),
+        category: CategoryType.foodAndDrink),
+    Expense(
+        id: 2,
+        title: 'Laundry',
+        amount: 22000,
+        date: DateTime.now(),
+        category: CategoryType.dailyNeeds),
   ];
 
   @override
