@@ -1,21 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:heroicons/heroicons.dart';
+import 'package:uang_kita/screens/dummy_screen.dart';
 import 'package:uang_kita/screens/home_screen.dart';
 import 'package:sizer/sizer.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const UangKitaApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class UangKitaApp extends StatefulWidget {
+  const UangKitaApp({super.key});
+
+  @override
+  State<StatefulWidget> createState() => _UangKitaAppState();
 
   // This widget is the root of your application.
+}
+
+class _UangKitaAppState extends State<UangKitaApp> {
   @override
   Widget build(BuildContext context) {
     return Sizer(
       builder: (context, orientation, deviceType) {
         return MaterialApp(
           title: 'Flutter Demo',
+          initialRoute: '/',
+          routes: {
+            '/': (context) => const HomeScreen(),
+            '/dummy': (context) => const DummyScreen(),
+          },
           theme: ThemeData(
             primarySwatch: Colors.blue,
             fontFamily: 'PlusJakartaSans',
@@ -31,7 +44,6 @@ class MyApp extends StatelessWidget {
               labelSmall: TextStyle(fontSize: 10.sp),
             ),
           ),
-          home: const Scaffold(body: SafeArea(child: HomeScreen())),
         );
       },
     );
