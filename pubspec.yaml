@@ -29,6 +29,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   heroicons: ^0.8.0
+  sizer: ^2.0.15
   flutter:
     sdk: flutter
 
