@@ -9,6 +9,11 @@ class TambahPengeluaranScreen extends StatefulWidget {
 }
 
 class _TambahPengeluaranScreenState extends State<TambahPengeluaranScreen> {
+  // Deklarasi variabel untuk textfield judul
+  final TextEditingController expalinC = TextEditingController();
+  // Deklarasi variabel untuk focus node
+  FocusNode ex = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,11 +22,11 @@ class _TambahPengeluaranScreenState extends State<TambahPengeluaranScreen> {
           alignment: AlignmentDirectional.center,
           children: [
             // Background Container
-            BackgroundContainer(context),
+            backgroundContainer(context),
             Positioned(
               top: 120,
               // Main Container
-              child: MainContainer(),
+              child: mainContainer(),
             ),
           ],
         ),
@@ -30,7 +35,7 @@ class _TambahPengeluaranScreenState extends State<TambahPengeluaranScreen> {
   }
 
   // Method untuk membuat main container
-  Container MainContainer() {
+  Container mainContainer() {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
@@ -40,16 +45,38 @@ class _TambahPengeluaranScreenState extends State<TambahPengeluaranScreen> {
       width: 340,
       child: Column(
         children: [
-          SizedBox(
-            height: 50,
-          )
+          const SizedBox(height: 50),
+          // textfield judul
+          judul()
         ],
       ),
     );
   }
 
+  // Method untuk membuat textfield judul
+  Padding judul() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: TextField(
+        focusNode: ex,
+        controller: expalinC,
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+          labelText: 'Judul',
+          labelStyle: TextStyle(fontSize: 17, color: Colors.grey.shade500),
+          enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(width: 2, color: Color(0xffC5C5C5))),
+          focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(width: 2, color: Color(0xff368983))),
+        ),
+      ),
+    );
+  }
+
   // Method untuk membuat background container
-  Column BackgroundContainer(BuildContext context) {
+  Column backgroundContainer(BuildContext context) {
     return Column(
       children: [
         Container(
