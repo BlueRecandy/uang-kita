@@ -16,7 +16,7 @@ class _ExpenseItemListWidgetState extends State<ExpenseItemListWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 4.h),
+      margin: EdgeInsets.only(top: 1.h),
       child: ListView.separated(
           itemBuilder: (context, index) {
             final expense = widget.expenseList[index];

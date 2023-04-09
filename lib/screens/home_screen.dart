@@ -1,7 +1,9 @@
 import 'package:flutter/widgets.dart';
+import 'package:heroicons/heroicons.dart';
 import 'package:sizer/sizer.dart';
 import 'package:uang_kita/models/category_type_model.dart';
 import 'package:uang_kita/models/expense_model.dart';
+import 'package:uang_kita/widgets/icon_button_widget.dart';
 import 'package:uang_kita/widgets/screens/home/card_widget.dart';
 import 'package:uang_kita/widgets/screens/home/expense_item_list_widget.dart';
 
@@ -96,6 +98,19 @@ class _HomeScreenState extends State<HomeScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const CardWidget(expense: 5000000),
+          Padding(
+            padding: EdgeInsets.only(
+              top: 2.h,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButtonWidget(
+                    icon: HeroIcons.bars3BottomLeft, onPressed: () {}),
+                IconButtonWidget(icon: HeroIcons.plus, onPressed: () {})
+              ],
+            ),
+          ),
           Expanded(child: ExpenseItemListWidget(expenseList: expenseList))
         ],
       ),

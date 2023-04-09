@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:sizer/sizer.dart';
 import 'package:uang_kita/models/category_type_model.dart';
 import 'package:uang_kita/utils/string_utils.dart';
 
