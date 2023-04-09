@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:uang_kita/screens/dummy_screen.dart';
 import 'package:uang_kita/screens/home_screen.dart';
+import 'package:uang_kita/screens/tambah_pengeluaran_screen.dart';
 import 'package:sizer/sizer.dart';
 
 void main() {
@@ -28,6 +29,7 @@ class _UangKitaAppState extends State<UangKitaApp> {
           routes: {
             '/': (context) => const HomeScreen(),
             '/dummy': (context) => const DummyScreen(),
+            '/tambah': (context) => const TambahPengeluaranScreen(),
           },
           theme: ThemeData(
             primarySwatch: Colors.blue,
