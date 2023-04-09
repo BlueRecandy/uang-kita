@@ -14,8 +14,36 @@ class _TambahPengeluaranScreenState extends State<TambahPengeluaranScreen> {
     return Scaffold(
       body: SafeArea(
         child: Stack(
-          children: [BackgroundContainer(context)],
+          alignment: AlignmentDirectional.center,
+          children: [
+            // Background Container
+            BackgroundContainer(context),
+            Positioned(
+              top: 120,
+              // Main Container
+              child: MainContainer(),
+            ),
+          ],
         ),
+      ),
+    );
+  }
+
+  // Method untuk membuat main container
+  Container MainContainer() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: Colors.white,
+      ),
+      height: 550,
+      width: 340,
+      child: Column(
+        children: [
+          SizedBox(
+            height: 50,
+          )
+        ],
       ),
     );
   }
