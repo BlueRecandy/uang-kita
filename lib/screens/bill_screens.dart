@@ -86,6 +86,10 @@ class _BillScreenState extends State<BillScreen> {
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
+            Text(
+              'Tambah Tagihan',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
             Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: _buildTextInputField(
@@ -118,7 +122,17 @@ class _BillScreenState extends State<BillScreen> {
                   });
                 },
               ),
-            )
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  String judul = _judulController.text;
+                  String jumlah = _jumlahController.text;
+                  String jatuhTempo = _jatuhTempoController.text;
+                  String kategori = _kategoriController.text;
+
+                  // TODO: Do something with the data, e.g. add to a database
+                },
+                child: const Text('Tambah'))
           ],
         ),
       )),
