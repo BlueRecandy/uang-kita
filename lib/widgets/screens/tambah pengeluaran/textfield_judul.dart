@@ -4,10 +4,11 @@ class JudulTextField extends StatelessWidget {
   final TextEditingController controller;
   final FocusNode focusNode;
 
-  JudulTextField({
+  const JudulTextField({
+    Key? key,
     required this.controller,
     required this.focusNode,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
