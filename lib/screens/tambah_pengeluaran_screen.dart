@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:uang_kita/models/category_type_model.dart';
 import 'package:uang_kita/widgets/screens/tambah pengeluaran/textfield_judul.dart';
+import 'package:uang_kita/widgets/screens/tambah%20pengeluaran/textfield_tanggal.dart';
 import '../widgets/screens/tambah pengeluaran/textfield_kategori.dart';
 import 'package:uang_kita/widgets/screens/tambah pengeluaran/textfield_jumlah.dart';
 
@@ -16,7 +17,6 @@ class TambahPengeluaranScreen extends StatefulWidget {
 class _TambahPengeluaranScreenState extends State<TambahPengeluaranScreen> {
   // Deklarasi variabel untuk textfield judul
   final TextEditingController titleController = TextEditingController();
-  // Deklarasi variabel untuk focus node
   FocusNode titleFocusNode = FocusNode();
   // Deklarasi variabel untuk dropdown
   String? selectedItem;
@@ -26,8 +26,10 @@ class _TambahPengeluaranScreenState extends State<TambahPengeluaranScreen> {
       .toList();
   // Deklarasi variabel untuk textfield jumlah
   final TextEditingController amountController = TextEditingController();
-  // Deklarasi variabel untuk focus node
   final FocusNode amountFocusNode = FocusNode();
+  // Deklarasi variabel untuk textfield tanggal
+  DateTime initialDate = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,6 +81,14 @@ class _TambahPengeluaranScreenState extends State<TambahPengeluaranScreen> {
             focusNode: amountFocusNode,
             controller: amountController,
           ),
+          const SizedBox(height: 30),
+          DateTimePicker(
+              initialDate: initialDate,
+              onDateChanged: (value) {
+                setState(() {
+                  initialDate = value;
+                });
+              }),
         ],
       ),
     );
