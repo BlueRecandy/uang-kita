@@ -26,6 +26,57 @@ class _BillScreenState extends State<BillScreen> {
     super.dispose();
   }
 
+  TextFormField _buildTextInputField(
+      {required TextEditingController controller,
+      required String label,
+      String? errorMessage}) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: label,
+        filled: true,
+        fillColor: const Color.fromARGB(255, 235, 235, 235),
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return errorMessage ?? '$label tidak boleh kosong';
+        }
+        return null;
+      },
+    );
+  }
+
+  Widget _buildJatuhTempoInput() {
+    return TextFormField(
+      controller: _jatuhTempoController,
+      decoration: const InputDecoration(
+        labelText: "Jatuh Tempo",
+      ),
+      readOnly: true,
+      onTap: () async {
+        final DateTime? picked = await showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(2020),
+            lastDate: DateTime(2027));
+        if (picked != null) {
+          setState(() {
+            final String formattedDate =
+                "${picked.day}/${picked.month}/${picked.year}";
+            _jatuhTempoController.text = formattedDate;
+          });
+        }
+      },
+    );
+  }
+
+  final _dropdownCategoryItems = CategoryType.values
+      .map((e) => DropdownMenuItem(
+            value: e.displayName,
+            child: Text(e.displayName),
+          ))
+      .toList();
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -37,57 +88,15 @@ class _BillScreenState extends State<BillScreen> {
           children: [
             Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  controller: _judulController,
-                  decoration: const InputDecoration(
-                    labelText: "Judul",
-                    filled: true,
-                    fillColor: Color.fromARGB(255, 235, 235, 235),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Judul tidak boleh kosong';
-                    }
-                    return null;
-                  },
-                )),
+                child: _buildTextInputField(
+                    controller: _judulController, label: 'Judul')),
             Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  controller: _jumlahController,
-                  decoration: const InputDecoration(
-                    labelText: "Jumlah",
-                    filled: true,
-                    fillColor: Color.fromARGB(255, 235, 235, 235),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Jumlah tidak boleh kosong';
-                    }
-                    return null;
-                  },
-                )),
+                child: _buildTextInputField(
+                    controller: _jumlahController, label: 'Jumlah')),
             Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  controller: _jatuhTempoController,
-                  decoration: const InputDecoration(
-                    labelText: "Jatuh Tempo",
-                  ),
-                  readOnly: true,
-                  onTap: () async {
-                    final DateTime? picked = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(2020),
-                        lastDate: DateTime(2027));
-                    if (picked != null) {
-                      setState(() {
-                        _jatuhTempoController.text = picked.toString();
-                      });
-                    }
-                  },
-                )),
+                child: _buildJatuhTempoInput()),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: DropdownButtonFormField(
@@ -96,7 +105,7 @@ class _BillScreenState extends State<BillScreen> {
                   filled: true,
                   fillColor: Color.fromARGB(255, 235, 235, 235),
                 ),
-                value: _kategoriController.text,
+                value: _dropdownCategoryItems.first.value,
                 items: CategoryType.values
                     .map((e) => DropdownMenuItem(
                           value: e.displayName,
@@ -105,7 +114,7 @@ class _BillScreenState extends State<BillScreen> {
                     .toList(),
                 onChanged: (value) {
                   setState(() {
-                    _kategoriController.text = value.toString();
+                    _kategoriController.text = value!;
                   });
                 },
               ),
