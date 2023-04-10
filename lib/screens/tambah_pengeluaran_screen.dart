@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:uang_kita/models/category_type_model.dart';
 import 'package:uang_kita/widgets/screens/tambah pengeluaran/textfield_judul.dart';
+import 'package:uang_kita/widgets/screens/tambah%20pengeluaran/save_button.dart';
 import 'package:uang_kita/widgets/screens/tambah%20pengeluaran/textfield_tanggal.dart';
 import '../widgets/screens/tambah pengeluaran/textfield_kategori.dart';
 import 'package:uang_kita/widgets/screens/tambah pengeluaran/textfield_jumlah.dart';
@@ -76,11 +77,13 @@ class _TambahPengeluaranScreenState extends State<TambahPengeluaranScreen> {
               });
             },
           ),
+          // textfield jumlah
           const SizedBox(height: 30),
           AmountTextField(
             focusNode: amountFocusNode,
             controller: amountController,
           ),
+          // textfield tanggal
           const SizedBox(height: 30),
           DateTimePicker(
               initialDate: initialDate,
@@ -89,6 +92,9 @@ class _TambahPengeluaranScreenState extends State<TambahPengeluaranScreen> {
                   initialDate = value;
                 });
               }),
+          // button save
+          const SizedBox(height: 70),
+          const SaveButton(),
         ],
       ),
     );
