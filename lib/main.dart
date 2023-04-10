@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
+import 'package:sizer/sizer.dart';
 import 'package:uang_kita/screens/dummy_screen.dart';
 import 'package:uang_kita/screens/home_screen.dart';
-import 'package:sizer/sizer.dart';
 
 void main() {
   runApp(const UangKitaApp());
@@ -13,22 +13,47 @@ class UangKitaApp extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => _UangKitaAppState();
-
-  // This widget is the root of your application.
 }
 
 class _UangKitaAppState extends State<UangKitaApp> {
+  int _currentIndex = 0;
+
+  final _screens = [
+    const HomeScreen(),
+    const DummyScreen(),
+  ];
+
+  BottomNavigationBarItem _buildNavbarItem(HeroIcons icon, String label) {
+    return BottomNavigationBarItem(
+        icon: HeroIcon(icon),
+        label: label,
+        activeIcon: HeroIcon(
+          icon,
+          style: HeroIconStyle.solid,
+        ));
+  }
+
+  BottomNavigationBar _buildNavbar() {
+    return BottomNavigationBar(
+      currentIndex: _currentIndex,
+      onTap: (value) {
+        setState(() {
+          _currentIndex = value;
+        });
+      },
+      items: [
+        _buildNavbarItem(HeroIcons.home, 'Beranda'),
+        _buildNavbarItem(HeroIcons.banknotes, 'Tagihan'),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Sizer(
       builder: (context, orientation, deviceType) {
         return MaterialApp(
           title: 'Flutter Demo',
-          initialRoute: '/',
-          routes: {
-            '/': (context) => const HomeScreen(),
-            '/dummy': (context) => const DummyScreen(),
-          },
           theme: ThemeData(
             primarySwatch: Colors.blue,
             fontFamily: 'PlusJakartaSans',
@@ -43,6 +68,10 @@ class _UangKitaAppState extends State<UangKitaApp> {
               labelMedium: TextStyle(fontSize: 12.sp),
               labelSmall: TextStyle(fontSize: 10.sp),
             ),
+          ),
+          home: Scaffold(
+            body: SafeArea(child: _screens[_currentIndex]),
+            bottomNavigationBar: _buildNavbar(),
           ),
         );
       },
