@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uang_kita/widgets/screens/tambah pengeluaran/textfield_judul.dart';
 
 class TambahPengeluaranScreen extends StatefulWidget {
   const TambahPengeluaranScreen({Key? key}) : super(key: key);
@@ -10,7 +11,7 @@ class TambahPengeluaranScreen extends StatefulWidget {
 
 class _TambahPengeluaranScreenState extends State<TambahPengeluaranScreen> {
   // Deklarasi variabel untuk textfield judul
-  final TextEditingController expalinC = TextEditingController();
+  final TextEditingController judulC = TextEditingController();
   // Deklarasi variabel untuk focus node
   FocusNode ex = FocusNode();
 
@@ -47,30 +48,8 @@ class _TambahPengeluaranScreenState extends State<TambahPengeluaranScreen> {
         children: [
           const SizedBox(height: 50),
           // textfield judul
-          judul()
+          JudulTextField(controller: judulC, focusNode: ex)
         ],
-      ),
-    );
-  }
-
-  // Method untuk membuat textfield judul
-  Padding judul() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: TextField(
-        focusNode: ex,
-        controller: expalinC,
-        decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-          labelText: 'Judul',
-          labelStyle: TextStyle(fontSize: 17, color: Colors.grey.shade500),
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(width: 2, color: Color(0xffC5C5C5))),
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(width: 2, color: Color(0xff368983))),
-        ),
       ),
     );
   }
