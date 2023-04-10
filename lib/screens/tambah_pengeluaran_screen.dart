@@ -1,5 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:uang_kita/models/category_type_model.dart';
 import 'package:uang_kita/widgets/screens/tambah pengeluaran/textfield_judul.dart';
+import '../widgets/screens/tambah pengeluaran/textfield_kategori.dart';
 
 class TambahPengeluaranScreen extends StatefulWidget {
   const TambahPengeluaranScreen({Key? key}) : super(key: key);
@@ -14,6 +17,12 @@ class _TambahPengeluaranScreenState extends State<TambahPengeluaranScreen> {
   final TextEditingController judulC = TextEditingController();
   // Deklarasi variabel untuk focus node
   FocusNode ex = FocusNode();
+  // Deklarasi variabel untuk dropdown
+  String? selectedItem;
+  // List untuk dropdown katagori
+  final katagoriList = CategoryType.values
+      .map((e) => CategoryTypeModel(type: e, icon: e.icon))
+      .toList();
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +55,20 @@ class _TambahPengeluaranScreenState extends State<TambahPengeluaranScreen> {
       width: 340,
       child: Column(
         children: [
-          const SizedBox(height: 50),
           // textfield judul
-          JudulTextField(controller: judulC, focusNode: ex)
+          const SizedBox(height: 50),
+          JudulTextField(controller: judulC, focusNode: ex),
+          // textfield katagori
+          const SizedBox(height: 30),
+          CustomDropdown(
+            items: katagoriList,
+            hint: 'Katagori',
+            onChanged: (value) {
+              setState(() {
+                selectedItem = value;
+              });
+            },
+          ),
         ],
       ),
     );
