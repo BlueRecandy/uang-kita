@@ -8,10 +8,11 @@ class CustomDropdown extends StatefulWidget {
   final Function(String?) onChanged;
 
   const CustomDropdown({
+    Key? key,
     required this.items,
     required this.hint,
     required this.onChanged,
-  });
+  }) : super(key: key);
 
   @override
   _CustomDropdownState createState() => _CustomDropdownState();
@@ -25,7 +26,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 15),
+        padding: const EdgeInsets.symmetric(horizontal: 15),
         width: 300,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -74,7 +75,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
             padding: const EdgeInsets.only(top: 12),
             child: Text(
               widget.hint,
-              style: TextStyle(color: Colors.grey),
+              style: const TextStyle(color: Colors.grey),
             ),
           ),
           dropdownColor: Colors.white,
