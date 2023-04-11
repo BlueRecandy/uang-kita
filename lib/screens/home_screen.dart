@@ -3,6 +3,7 @@ import 'package:heroicons/heroicons.dart';
 import 'package:sizer/sizer.dart';
 import 'package:uang_kita/models/category_type_model.dart';
 import 'package:uang_kita/models/expense_model.dart';
+import 'package:uang_kita/screens/tambah_pengeluaran_screen.dart';
 import 'package:uang_kita/widgets/icon_button_widget.dart';
 import 'package:uang_kita/widgets/screens/home/card_widget.dart';
 import 'package:uang_kita/widgets/screens/home/expense_item_list_widget.dart';
@@ -108,7 +109,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   IconButtonWidget(
                       icon: HeroIcons.bars3BottomLeft, onPressed: () {}),
-                  IconButtonWidget(icon: HeroIcons.plus, onPressed: () {})
+                  IconButtonWidget(
+                      icon: HeroIcons.plus,
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>
+                                const TambahPengeluaranScreen()));
+                      })
                 ],
               ),
             ),

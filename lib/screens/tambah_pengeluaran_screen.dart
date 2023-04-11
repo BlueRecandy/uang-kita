@@ -1,4 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:uang_kita/models/category_type_model.dart';
+import 'package:uang_kita/widgets/screens/tambah pengeluaran/textfield_judul.dart';
+import 'package:uang_kita/widgets/screens/tambah%20pengeluaran/save_button.dart';
+import 'package:uang_kita/widgets/screens/tambah%20pengeluaran/textfield_tanggal.dart';
+import '../widgets/screens/tambah pengeluaran/textfield_kategori.dart';
+import 'package:uang_kita/widgets/screens/tambah pengeluaran/textfield_jumlah.dart';
 
 class TambahPengeluaranScreen extends StatefulWidget {
   const TambahPengeluaranScreen({Key? key}) : super(key: key);
@@ -10,9 +17,19 @@ class TambahPengeluaranScreen extends StatefulWidget {
 
 class _TambahPengeluaranScreenState extends State<TambahPengeluaranScreen> {
   // Deklarasi variabel untuk textfield judul
-  final TextEditingController expalinC = TextEditingController();
-  // Deklarasi variabel untuk focus node
-  FocusNode ex = FocusNode();
+  final TextEditingController titleController = TextEditingController();
+  FocusNode titleFocusNode = FocusNode();
+  // Deklarasi variabel untuk dropdown
+  String? selectedItem;
+  // List untuk dropdown katagori
+  final katagoriList = CategoryType.values
+      .map((e) => CategoryTypeModel(type: e, icon: e.icon))
+      .toList();
+  // Deklarasi variabel untuk textfield jumlah
+  final TextEditingController amountController = TextEditingController();
+  final FocusNode amountFocusNode = FocusNode();
+  // Deklarasi variabel untuk textfield tanggal
+  DateTime initialDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -45,32 +62,40 @@ class _TambahPengeluaranScreenState extends State<TambahPengeluaranScreen> {
       width: 340,
       child: Column(
         children: [
-          const SizedBox(height: 50),
           // textfield judul
-          judul()
+          const SizedBox(height: 50),
+          JudulTextField(
+              controller: titleController, focusNode: titleFocusNode),
+          // textfield katagori
+          const SizedBox(height: 30),
+          CustomDropdown(
+            items: katagoriList,
+            hint: 'Katagori',
+            onChanged: (value) {
+              setState(() {
+                selectedItem = value;
+              });
+            },
+          ),
+          // textfield jumlah
+          const SizedBox(height: 30),
+          AmountTextField(
+            focusNode: amountFocusNode,
+            controller: amountController,
+          ),
+          // textfield tanggal
+          const SizedBox(height: 30),
+          DateTimePicker(
+              initialDate: initialDate,
+              onDateChanged: (value) {
+                setState(() {
+                  initialDate = value;
+                });
+              }),
+          // button save
+          const SizedBox(height: 70),
+          const SaveButton(),
         ],
-      ),
-    );
-  }
-
-  // Method untuk membuat textfield judul
-  Padding judul() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: TextField(
-        focusNode: ex,
-        controller: expalinC,
-        decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-          labelText: 'Judul',
-          labelStyle: TextStyle(fontSize: 17, color: Colors.grey.shade500),
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(width: 2, color: Color(0xffC5C5C5))),
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(width: 2, color: Color(0xff368983))),
-        ),
       ),
     );
   }
