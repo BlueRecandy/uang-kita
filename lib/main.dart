@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:sizer/sizer.dart';
+import 'package:uang_kita/screens/bill_screens.dart';
 import 'package:uang_kita/screens/dummy_screen.dart';
 import 'package:uang_kita/screens/home_screen.dart';
 
@@ -20,7 +21,7 @@ class _UangKitaAppState extends State<UangKitaApp> {
 
   final _screens = [
     const HomeScreen(),
-    const DummyScreen(),
+    const BillScreen(),
   ];
 
   BottomNavigationBarItem _buildNavbarItem(HeroIcons icon, String label) {
