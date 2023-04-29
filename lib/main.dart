@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:sizer/sizer.dart';
-import 'package:uang_kita/screens/bill_screens.dart';
-import 'package:uang_kita/screens/dummy_screen.dart';
-import 'package:uang_kita/screens/home_screen.dart';
+import 'package:uang_kita/screens/daftar_tagihan_screen.dart';
+import 'package:uang_kita/screens/daftar_pengeluaran_screen.dart';
 
 void main() {
   runApp(const UangKitaApp());
@@ -20,8 +19,8 @@ class _UangKitaAppState extends State<UangKitaApp> {
   int _currentIndex = 0;
 
   final _screens = [
-    const HomeScreen(),
-    const BillScreen(),
+    const DaftarPengeluaranScreen(),
+    const DaftarTagihanPage(),
   ];
 
   BottomNavigationBarItem _buildNavbarItem(HeroIcons icon, String label) {

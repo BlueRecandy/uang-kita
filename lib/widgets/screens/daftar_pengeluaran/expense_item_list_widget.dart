@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:uang_kita/models/expense_model.dart';
-import 'package:uang_kita/widgets/screens/home/expense_item_widget.dart';
+import 'package:uang_kita/widgets/screens/daftar_pengeluaran/expense_item_widget.dart';
 
 class ExpenseItemListWidget extends StatefulWidget {
   const ExpenseItemListWidget({super.key, required this.expenseList});
