@@ -5,17 +5,17 @@ import 'package:uang_kita/models/category_type_model.dart';
 import 'package:uang_kita/models/expense_model.dart';
 import 'package:uang_kita/screens/tambah_pengeluaran_screen.dart';
 import 'package:uang_kita/widgets/icon_button_widget.dart';
-import 'package:uang_kita/widgets/screens/home/card_widget.dart';
-import 'package:uang_kita/widgets/screens/home/expense_item_list_widget.dart';
+import 'package:uang_kita/widgets/screens/daftar_pengeluaran/card_widget.dart';
+import 'package:uang_kita/widgets/screens/daftar_pengeluaran/expense_item_list_widget.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class DaftarPengeluaranScreen extends StatefulWidget {
+  const DaftarPengeluaranScreen({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _HomeScreenState();
+  State<StatefulWidget> createState() => _DaftarPengeluaranScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _DaftarPengeluaranScreenState extends State<DaftarPengeluaranScreen> {
   final expenseList = [
     Expense(
         id: 1,
