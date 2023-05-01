@@ -18,7 +18,7 @@ class TagihanItemWidget extends StatelessWidget {
         title,
         style: Theme.of(context)
             .textTheme
-            .bodySmall
+            .labelLarge
             ?.copyWith(fontWeight: FontWeight.bold),
       ),
       subtitle: Text(
@@ -33,7 +33,9 @@ class TagihanItemWidget extends StatelessWidget {
         onPressed: () {},
         child: Text(
           'Rp. $price',
-          style: Theme.of(context).textTheme.labelMedium,
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
         ),
       ),
       isThreeLine: true,
