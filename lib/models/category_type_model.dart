@@ -55,6 +55,18 @@ extension CategoryTypeExtension on CategoryType {
   }
 }
 
+// map string to CategoryType
+final categoryTypeMap = {
+  'foodAndDrink': CategoryType.foodAndDrink,
+  'transportation': CategoryType.transportation,
+  'clothing': CategoryType.clothing,
+  'entertainment': CategoryType.entertainment,
+  'dailyNeeds': CategoryType.dailyNeeds,
+  'health': CategoryType.health,
+  'education': CategoryType.education,
+  'others': CategoryType.others,
+};
+
 class CategoryTypeModel {
   final CategoryType type;
   final Icon icon;

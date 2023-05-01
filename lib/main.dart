@@ -1,10 +1,21 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:sizer/sizer.dart';
+import 'package:uang_kita/db/sqlite.dart';
 import 'package:uang_kita/screens/daftar_tagihan_screen.dart';
 import 'package:uang_kita/screens/daftar_pengeluaran_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final sqlite = SQLite();
+  await sqlite.connect();
+
+  if (kDebugMode) {
+    print('Database: ${sqlite.connection}');
+  }
+
   runApp(const UangKitaApp());
 }
 
