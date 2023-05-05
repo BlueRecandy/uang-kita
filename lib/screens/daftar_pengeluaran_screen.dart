@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:sizer/sizer.dart';
+import 'package:uang_kita/db/sqlite.dart';
 import 'package:uang_kita/models/category_type_model.dart';
 import 'package:uang_kita/models/expense_model.dart';
 import 'package:uang_kita/screens/tambah_pengeluaran_screen.dart';
@@ -29,67 +30,27 @@ class _DaftarPengeluaranScreenState extends State<DaftarPengeluaranScreen> {
         amount: 22000,
         date: DateTime.now(),
         category: CategoryType.dailyNeeds),
-    Expense(
-        id: 1,
-        title: 'Nasi Kuning',
-        amount: 10000,
-        date: DateTime.now(),
-        category: CategoryType.foodAndDrink),
-    Expense(
-        id: 2,
-        title: 'Laundry',
-        amount: 22000,
-        date: DateTime.now(),
-        category: CategoryType.dailyNeeds),
-    Expense(
-        id: 1,
-        title: 'Nasi Kuning',
-        amount: 10000,
-        date: DateTime.now(),
-        category: CategoryType.foodAndDrink),
-    Expense(
-        id: 2,
-        title: 'Laundry',
-        amount: 22000,
-        date: DateTime.now(),
-        category: CategoryType.dailyNeeds),
-    Expense(
-        id: 1,
-        title: 'Nasi Kuning',
-        amount: 10000,
-        date: DateTime.now(),
-        category: CategoryType.foodAndDrink),
-    Expense(
-        id: 2,
-        title: 'Laundry',
-        amount: 22000,
-        date: DateTime.now(),
-        category: CategoryType.dailyNeeds),
-    Expense(
-        id: 1,
-        title: 'Nasi Kuning',
-        amount: 10000,
-        date: DateTime.now(),
-        category: CategoryType.foodAndDrink),
-    Expense(
-        id: 2,
-        title: 'Laundry',
-        amount: 22000,
-        date: DateTime.now(),
-        category: CategoryType.dailyNeeds),
-    Expense(
-        id: 1,
-        title: 'Nasi Kuning',
-        amount: 10000,
-        date: DateTime.now(),
-        category: CategoryType.foodAndDrink),
-    Expense(
-        id: 2,
-        title: 'Laundry',
-        amount: 22000,
-        date: DateTime.now(),
-        category: CategoryType.dailyNeeds),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+
+    // TODO read data from database
+    loadExpense();
+  }
+
+  Future<void> loadExpense() async {
+    final sqlite = SQLite.getInstance();
+
+    final expenses =
+        await sqlite.expenseRepository.findAll(await sqlite.database);
+
+    setState(() {
+      expenseList.clear();
+      expenseList.addAll(expenses);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,8 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:uang_kita/models/category_type_model.dart';
 import 'package:uang_kita/models/expense_model.dart';
-import 'package:uang_kita/repositories/interfaces/interface_repository.dart';
+
+import 'interfaces/interface_repository.dart';
 
 class ExpenseRepository extends IRepository<Expense, int> {
   final tableName = 'expenses';
