@@ -27,14 +27,22 @@ class ExpenseRepository extends IRepository<Expense, int> {
   Future<List<Expense>> findAll(Database db) async {
     final expenseRecords = await db.query(tableName);
 
-    return expenseRecords.map((record) {
-      return Expense(
-          id: record['id'] as int,
-          title: record['title'] as String,
-          amount: record['amount'] as int,
-          date: DateTime.parse(record['date'] as String),
-          category: categoryTypeMap[record['category'] as String]!);
-    }).toList();
+    final List<Expense> expenses = [];
+
+    for (var element in expenseRecords) {
+      final category =
+          CategoryType.values[int.parse(element['category'].toString())];
+
+      final expense = Expense(
+          title: element['title'] as String,
+          amount: int.parse(element['amount'].toString()),
+          date: DateTime.parse(element['date'].toString()),
+          category: category);
+
+      expenses.add(expense);
+    }
+
+    return expenses;
   }
 
   @override

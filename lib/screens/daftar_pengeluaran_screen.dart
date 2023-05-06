@@ -17,20 +17,7 @@ class DaftarPengeluaranScreen extends StatefulWidget {
 }
 
 class _DaftarPengeluaranScreenState extends State<DaftarPengeluaranScreen> {
-  final expenseList = [
-    Expense(
-        id: 1,
-        title: 'Nasi Kuning',
-        amount: 10000,
-        date: DateTime.now(),
-        category: CategoryType.foodAndDrink),
-    Expense(
-        id: 2,
-        title: 'Laundry',
-        amount: 22000,
-        date: DateTime.now(),
-        category: CategoryType.dailyNeeds),
-  ];
+  final List<Expense> expenseList = [];
 
   @override
   void initState() {
@@ -42,6 +29,7 @@ class _DaftarPengeluaranScreenState extends State<DaftarPengeluaranScreen> {
 
   Future<void> loadExpense() async {
     final sqlite = SQLite.getInstance();
+    final db = await sqlite.database;
 
     final expenses =
         await sqlite.expenseRepository.findAll(await sqlite.database);
