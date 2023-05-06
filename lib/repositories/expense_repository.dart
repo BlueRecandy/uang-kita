@@ -39,7 +39,7 @@ class ExpenseRepository extends IRepository<Expense, int> {
 
   @override
   Future<List<Expense>> findAll(Database db) async {
-    final expenseRecords = await db.query(tableName);
+    final expenseRecords = await db.query(tableName, orderBy: 'date DESC');
 
     final List<Expense> expenses = [];
 
