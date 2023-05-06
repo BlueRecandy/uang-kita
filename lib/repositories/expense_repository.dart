@@ -1,8 +1,7 @@
-import 'dart:math';
-
 import 'package:sqflite/sqflite.dart';
 import 'package:uang_kita/models/category_type_model.dart';
 import 'package:uang_kita/models/expense_model.dart';
+import 'package:uang_kita/utils/model_utils.dart';
 
 import 'interfaces/interface_repository.dart';
 
@@ -45,13 +44,7 @@ class ExpenseRepository extends IRepository<Expense, int> {
     final List<Expense> expenses = [];
 
     for (var element in expenseRecords) {
-      final category = categoryTypeMap[element['category'].toString()];
-
-      final expense = Expense(
-          title: element['title'] as String,
-          amount: int.parse(element['amount'].toString()),
-          date: DateTime.parse(element['date'].toString()),
-          category: category!);
+      final expense = ModelUtils.mapToExpense(element);
 
       expenses.add(expense);
     }
@@ -74,17 +67,7 @@ class ExpenseRepository extends IRepository<Expense, int> {
 
     final expenseRaw = result.first;
 
-    final category =
-        CategoryType.values[int.parse(expenseRaw['category'].toString())];
-    final amount = int.parse(expenseRaw['amount'].toString());
-    final date = DateTime.parse(expenseRaw['date'].toString());
-
-    final expense = Expense(
-        id: id,
-        title: expenseRaw['title'].toString(),
-        amount: amount,
-        date: date,
-        category: category);
+    final expense = ModelUtils.mapToExpense(expenseRaw);
 
     return expense;
   }
@@ -96,15 +79,7 @@ class ExpenseRepository extends IRepository<Expense, int> {
     final List<Expense> expenses = [];
 
     for (var element in result) {
-      final category =
-          CategoryType.values[int.parse(element['category'].toString())];
-
-      final expense = Expense(
-          id: element['id'] as int,
-          title: element['title'] as String,
-          amount: int.parse(element['amount'].toString()),
-          date: DateTime.parse(element['date'].toString()),
-          category: category);
+      final expense = ModelUtils.mapToExpense(element);
 
       expenses.add(expense);
     }
