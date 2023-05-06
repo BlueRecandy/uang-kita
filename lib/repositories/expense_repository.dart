@@ -20,6 +20,15 @@ class ExpenseRepository extends IRepository<Expense, int> {
 
   @override
   Future<void> insert(Database db, Map<String, dynamic> data) {
+    // validation has key: title, amount, category
+    if (!data.containsKey('title') ||
+        !data.containsKey('amount') ||
+        !data.containsKey('category')) {
+      throw Exception('Tidak terdapat field title, amount, atau category');
+    }
+
+    data['date'] = DateTime.now().toIso8601String();
+
     return db.insert(tableName, data);
   }
 
@@ -30,13 +39,15 @@ class ExpenseRepository extends IRepository<Expense, int> {
     final List<Expense> expenses = [];
 
     for (var element in expenseRecords) {
+      final amount = int.parse(element['amount'].toString());
+      final date = DateTime.parse(element['date'].toString());
       final category =
           CategoryType.values[int.parse(element['category'].toString())];
 
       final expense = Expense(
           title: element['title'] as String,
-          amount: int.parse(element['amount'].toString()),
-          date: DateTime.parse(element['date'].toString()),
+          amount: amount,
+          date: date,
           category: category);
 
       expenses.add(expense);
