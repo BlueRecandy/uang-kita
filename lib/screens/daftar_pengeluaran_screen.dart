@@ -23,7 +23,6 @@ class _DaftarPengeluaranScreenState extends State<DaftarPengeluaranScreen> {
   void initState() {
     super.initState();
 
-    // TODO read data from database
     loadExpense();
   }
 
@@ -31,8 +30,7 @@ class _DaftarPengeluaranScreenState extends State<DaftarPengeluaranScreen> {
     final sqlite = SQLite.getInstance();
     final db = await sqlite.database;
 
-    final expenses =
-        await sqlite.expenseRepository.findAll(await sqlite.database);
+    final expenses = await sqlite.expenseRepository.findAll(db);
 
     setState(() {
       expenseList.clear();

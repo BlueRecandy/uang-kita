@@ -9,4 +9,8 @@ abstract class IRepository<E, T> {
   Future<void> delete(Database db, T id);
 
   Future<List<E>> findAll(Database db);
+
+  Future<List<E>> findMany(Database db);
+
+  Future<E?> findById(Database db, T id);
 }

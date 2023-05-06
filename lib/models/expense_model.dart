@@ -13,14 +13,4 @@ class Expense {
   final int amount;
   final DateTime date;
   final CategoryType category;
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'title': title,
-      'amount': amount,
-      'date': date.toIso8601String(),
-      'category': category.index,
-    };
-  }
 }
