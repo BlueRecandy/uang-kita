@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:sqflite/sqflite.dart';
 import 'package:uang_kita/models/category_type_model.dart';
 import 'package:uang_kita/models/expense_model.dart';
@@ -20,14 +22,18 @@ class ExpenseRepository extends IRepository<Expense, int> {
 
   @override
   Future<void> insert(Database db, Map<String, dynamic> data) {
-    // validation has key: title, amount, category
-    if (!data.containsKey('title') ||
-        !data.containsKey('amount') ||
-        !data.containsKey('category')) {
-      throw Exception('Tidak terdapat field title, amount, atau category');
+    // validate data
+    if (data['title'] == null ||
+        data['category'] == null ||
+        data['amount'] == null) {
+      throw Exception('Field title, category, dan amount kosong');
     }
 
     data['date'] = DateTime.now().toIso8601String();
+
+    final category = data['category'] as CategoryType;
+
+    data['category'] = category.name;
 
     return db.insert(tableName, data);
   }
@@ -39,16 +45,13 @@ class ExpenseRepository extends IRepository<Expense, int> {
     final List<Expense> expenses = [];
 
     for (var element in expenseRecords) {
-      final amount = int.parse(element['amount'].toString());
-      final date = DateTime.parse(element['date'].toString());
-      final category =
-          CategoryType.values[int.parse(element['category'].toString())];
+      final category = categoryTypeMap[element['category'].toString()];
 
       final expense = Expense(
           title: element['title'] as String,
-          amount: amount,
-          date: date,
-          category: category);
+          amount: int.parse(element['amount'].toString()),
+          date: DateTime.parse(element['date'].toString()),
+          category: category!);
 
       expenses.add(expense);
     }
@@ -59,5 +62,53 @@ class ExpenseRepository extends IRepository<Expense, int> {
   @override
   Future<void> delete(Database db, int id) {
     return db.delete(tableName, where: 'id = ?', whereArgs: [id]);
+  }
+
+  @override
+  Future<Expense?> findById(Database db, int id) async {
+    final result = await db.query(tableName, where: 'id = ?', whereArgs: [id]);
+
+    if (result.isEmpty) {
+      return null;
+    }
+
+    final expenseRaw = result.first;
+
+    final category =
+        CategoryType.values[int.parse(expenseRaw['category'].toString())];
+    final amount = int.parse(expenseRaw['amount'].toString());
+    final date = DateTime.parse(expenseRaw['date'].toString());
+
+    final expense = Expense(
+        id: id,
+        title: expenseRaw['title'].toString(),
+        amount: amount,
+        date: date,
+        category: category);
+
+    return expense;
+  }
+
+  @override
+  Future<List<Expense>> findMany(Database db) async {
+    final result = await db.query(tableName, orderBy: 'date DESC');
+
+    final List<Expense> expenses = [];
+
+    for (var element in result) {
+      final category =
+          CategoryType.values[int.parse(element['category'].toString())];
+
+      final expense = Expense(
+          id: element['id'] as int,
+          title: element['title'] as String,
+          amount: int.parse(element['amount'].toString()),
+          date: DateTime.parse(element['date'].toString()),
+          category: category);
+
+      expenses.add(expense);
+    }
+
+    return expenses;
   }
 }
