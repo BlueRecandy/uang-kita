@@ -17,13 +17,24 @@ class _ExpenseItemListWidgetState extends State<ExpenseItemListWidget> {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 1.h),
-      child: ListView.separated(
-          itemBuilder: (context, index) {
-            final expense = widget.expenseList[index];
-            return ExpenseItemWidget(expense: expense);
-          },
-          separatorBuilder: (context, index) => const Divider(),
-          itemCount: widget.expenseList.length),
+      child: widget.expenseList.isEmpty
+          ? Center(
+              child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Tidak ada data pengeluaran',
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+              ],
+            ))
+          : ListView.separated(
+              itemBuilder: (context, index) {
+                final expense = widget.expenseList[index];
+                return ExpenseItemWidget(expense: expense);
+              },
+              separatorBuilder: (context, index) => const Divider(),
+              itemCount: widget.expenseList.length),
     );
   }
 }

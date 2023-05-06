@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:sizer/sizer.dart';
 import 'package:uang_kita/db/sqlite.dart';
-import 'package:uang_kita/models/category_type_model.dart';
 import 'package:uang_kita/models/expense_model.dart';
 import 'package:uang_kita/screens/tambah_pengeluaran_screen.dart';
 import 'package:uang_kita/widgets/icon_button_widget.dart';
@@ -23,7 +22,6 @@ class _DaftarPengeluaranScreenState extends State<DaftarPengeluaranScreen> {
   void initState() {
     super.initState();
 
-    // TODO read data from database
     loadExpense();
   }
 
@@ -31,8 +29,7 @@ class _DaftarPengeluaranScreenState extends State<DaftarPengeluaranScreen> {
     final sqlite = SQLite.getInstance();
     final db = await sqlite.database;
 
-    final expenses =
-        await sqlite.expenseRepository.findAll(await sqlite.database);
+    final expenses = await sqlite.expenseRepository.findAll(db);
 
     setState(() {
       expenseList.clear();
