@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:sqflite/sqflite.dart';
 import 'package:uang_kita/models/category_type_model.dart';
 import 'package:uang_kita/models/expense_model.dart';
