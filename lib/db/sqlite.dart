@@ -1,26 +1,66 @@
 import 'package:flutter/foundation.dart';
+import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:uang_kita/models/expense_model.dart';
+import 'package:uang_kita/repositories/interfaces/interface_repository.dart';
 
-import 'package:uang_kita/repositories/expense_repository.dart';
-import '../repositories/interfaces/interface_repository.dart';
+import '../repositories/expense_repository.dart';
 
 class SQLite {
-  late Database connection;
+  static final SQLite _instance = SQLite._internal();
 
-  late final IRepository<Expense, int> expensesRepository;
+  factory SQLite() => _instance;
 
-  SQLite() {
-    expensesRepository = ExpenseRepository();
+  static Database? _database;
+
+  // Repositories
+  late IRepository<Expense, int> expenseRepository;
+
+  SQLite._internal() {
     if (kDebugMode) {
-      print('Initializing...');
+      print('Initializing SQLite...');
     }
+
+    _initRepositories();
+    _connect();
   }
 
-  Future<void> connect() async {
-    connection = await openDatabase('database.db', version: 1,
-        onCreate: (db, version) async {
-      await expensesRepository.createTable(db);
-    });
+  static SQLite getInstance() {
+    return _instance;
+  }
+
+  void _initRepositories() {
+    expenseRepository = ExpenseRepository();
+  }
+
+  Future<Database> _connect() async {
+    final path = join(await getDatabasesPath(), 'uang_kita.db');
+
+    _database = await openDatabase(
+      path,
+      version: 1,
+      onCreate: (db, version) async {
+        // create tables here
+        await expenseRepository.createTable(db);
+
+        if (kDebugMode) {
+          print('Tables created');
+        }
+      },
+    );
+
+    if (kDebugMode) {
+      print('Database connected');
+    }
+
+    return _database!;
+  }
+
+  Future<Database> get database async {
+    if (_database != null) {
+      return _database!;
+    }
+
+    return await _connect();
   }
 }
