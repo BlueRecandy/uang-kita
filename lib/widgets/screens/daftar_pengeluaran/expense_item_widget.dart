@@ -34,7 +34,7 @@ class ExpenseItemWidget extends StatelessWidget {
           ],
         ),
         Text(
-          'Rp. ${StringUtils.formattedMoney(expense.amount, true)}',
+          'Rp. -${StringUtils.formattedMoney(expense.amount)}',
           style: Theme.of(context)
               .textTheme
               .labelMedium

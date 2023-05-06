@@ -17,6 +17,7 @@ class DaftarPengeluaranScreen extends StatefulWidget {
 
 class _DaftarPengeluaranScreenState extends State<DaftarPengeluaranScreen> {
   final List<Expense> expenseList = [];
+  int monthlyExpense = 0;
 
   @override
   void initState() {
@@ -31,9 +32,21 @@ class _DaftarPengeluaranScreenState extends State<DaftarPengeluaranScreen> {
 
     final expenses = await sqlite.expenseRepository.findAll(db);
 
+    final now = DateTime.now();
+
+    final thisMonthExpense = expenses
+        .where((expense) =>
+            expense.date.month == now.month && expense.date.year == now.year)
+        .toList();
+
+    final int currentMonthExpense = -thisMonthExpense.fold<int>(
+        0, (previousValue, element) => previousValue + element.amount);
+
     setState(() {
       expenseList.clear();
       expenseList.addAll(expenses);
+
+      monthlyExpense = currentMonthExpense;
     });
   }
 
@@ -45,7 +58,7 @@ class _DaftarPengeluaranScreenState extends State<DaftarPengeluaranScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const CardWidget(expense: 5000000),
+            CardWidget(expense: monthlyExpense),
             Padding(
               padding: EdgeInsets.only(
                 top: 2.h,

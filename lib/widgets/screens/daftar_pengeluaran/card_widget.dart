@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:uang_kita/utils/string_utils.dart';
@@ -38,7 +37,7 @@ class CardWidget extends StatelessWidget {
           ),
           Padding(padding: EdgeInsets.only(bottom: 3.h)),
           Text(
-            'Rp. ${StringUtils.formattedMoney(expense, true)}',
+            'Rp. ${StringUtils.formattedMoney(expense)}',
             style: Theme.of(context).textTheme.displaySmall?.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.w600,
