@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:uang_kita/models/category_type_model.dart';
-import 'package:uang_kita/widgets/screens/tambah_pengeluaran/textfield_judul.dart';
-import 'package:uang_kita/widgets/screens/tambah_pengeluaran/textfield_jumlah.dart';
-import 'package:uang_kita/widgets/screens/tambah_pengeluaran/save_button.dart';
-import 'package:uang_kita/widgets/screens/tambah_pengeluaran/textfield_tanggal.dart';
-
+import '../widgets/screens/tambah_pengeluaran/save_button.dart';
+import '../widgets/screens/tambah_pengeluaran/textfield_judul.dart';
+import '../widgets/screens/tambah_pengeluaran/textfield_jumlah.dart';
 import '../widgets/screens/tambah_pengeluaran/textfield_kategori.dart';
+import '../widgets/screens/tambah_pengeluaran/textfield_tanggal.dart';
 
 class TambahPengeluaranScreen extends StatefulWidget {
   const TambahPengeluaranScreen({Key? key}) : super(key: key);
@@ -19,7 +18,7 @@ class _TambahPengeluaranScreenState extends State<TambahPengeluaranScreen> {
   // Deklarasi variabel untuk textfield judul
   final TextEditingController titleController = TextEditingController();
   FocusNode titleFocusNode = FocusNode();
-  // Deklarasi variabel untuk dropdown
+  // Deklarasi variabel untuk dropdown katagori
   String? selectedItem;
   // List untuk dropdown katagori
   final katagoriList = CategoryType.values
@@ -68,16 +67,16 @@ class _TambahPengeluaranScreenState extends State<TambahPengeluaranScreen> {
               controller: titleController, focusNode: titleFocusNode),
           // textfield katagori
           const SizedBox(height: 30),
-          CustomDropdown(
+          DropdownCategoryItems(
             items: katagoriList,
-            hint: 'Katagori',
+            hint: 'Kategori',
             onChanged: (value) {
               setState(() {
                 selectedItem = value;
               });
             },
           ),
-          // textfield jumlah
+          //textfield jumlah
           const SizedBox(height: 30),
           AmountTextField(
             focusNode: amountFocusNode,
@@ -107,7 +106,7 @@ class _TambahPengeluaranScreenState extends State<TambahPengeluaranScreen> {
         Container(
           width: double.infinity,
           height: 240,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.blue,
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(20),
@@ -116,9 +115,9 @@ class _TambahPengeluaranScreenState extends State<TambahPengeluaranScreen> {
           ),
           child: Column(
             children: [
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -127,16 +126,16 @@ class _TambahPengeluaranScreenState extends State<TambahPengeluaranScreen> {
                       onTap: () {
                         Navigator.of(context).pop();
                       },
-                      child: Icon(Icons.arrow_back, color: Colors.white),
+                      child: const Icon(Icons.arrow_back, color: Colors.white),
                     ),
-                    Text(
+                    const Text(
                       'Tambah Pengeluaran',
                       style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w600,
                           color: Colors.white),
                     ),
-                    Icon(
+                    const Icon(
                       Icons.attach_file_outlined,
                       color: Colors.white,
                     )
