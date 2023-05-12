@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../../../models/category_type_model.dart';
 
-class CustomDropdown extends StatefulWidget {
+class DropdownCategoryItems extends StatefulWidget {
   final List<CategoryTypeModel> items;
   final String hint;
   final Function(String?) onChanged;
 
-  const CustomDropdown({
+  const DropdownCategoryItems({
     Key? key,
     required this.items,
     required this.hint,
@@ -15,10 +15,10 @@ class CustomDropdown extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CustomDropdownState createState() => _CustomDropdownState();
+  _DropdownCategoryItemsState createState() => _DropdownCategoryItemsState();
 }
 
-class _CustomDropdownState extends State<CustomDropdown> {
+class _DropdownCategoryItemsState extends State<DropdownCategoryItems> {
   String? selectedItem;
 
   @override
@@ -35,52 +35,48 @@ class _CustomDropdownState extends State<CustomDropdown> {
             color: Color(0xffC5C5C5),
           ),
         ),
-        child: DropdownButton<String>(
+        child: DropdownButtonFormField<String>(
           value: selectedItem,
           onChanged: widget.onChanged,
           items: widget.items
               .map((e) => DropdownMenuItem(
+                    value: e.type.displayName,
                     child: Container(
                       alignment: Alignment.center,
                       child: Row(
                         children: [
-                          Container(
+                          SizedBox(
                             width: 40,
                             child: e.icon,
                           ),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           Text(
                             e.type.displayName,
-                            style: TextStyle(fontSize: 18),
+                            style: const TextStyle(fontSize: 18),
                           )
                         ],
                       ),
                     ),
-                    value: e.type.displayName,
                   ))
               .toList(),
           selectedItemBuilder: (BuildContext context) => widget.items
               .map((e) => Row(
                     children: [
-                      Container(
+                      SizedBox(
                         width: 42,
                         child: e.icon,
                       ),
-                      SizedBox(width: 5),
+                      const SizedBox(width: 5),
                       Text(e.type.displayName)
                     ],
                   ))
               .toList(),
-          hint: Padding(
-            padding: const EdgeInsets.only(top: 12),
-            child: Text(
-              widget.hint,
-              style: const TextStyle(color: Colors.grey),
-            ),
+          decoration: InputDecoration(
+            hintText: widget.hint,
+            hintStyle: const TextStyle(color: Colors.grey),
           ),
           dropdownColor: Colors.white,
           isExpanded: true,
-          underline: Container(),
         ),
       ),
     );
