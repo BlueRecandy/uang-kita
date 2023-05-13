@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:uang_kita/models/bill_model.dart';
 import 'package:uang_kita/models/expense_model.dart';
+import 'package:uang_kita/repositories/bill_repository.dart';
 import 'package:uang_kita/repositories/interfaces/interface_repository.dart';
 
 import '../repositories/expense_repository.dart';
@@ -15,6 +17,7 @@ class SQLite {
 
   // Repositories
   late IRepository<Expense, int> expenseRepository;
+  late IRepository<Bill, int> billRepository;
 
   SQLite._internal() {
     if (kDebugMode) {
@@ -31,6 +34,7 @@ class SQLite {
 
   void _initRepositories() {
     expenseRepository = ExpenseRepository();
+    billRepository = BillRepository();
   }
 
   Future<Database> _connect() async {
@@ -42,6 +46,7 @@ class SQLite {
       onCreate: (db, version) async {
         // create tables here
         await expenseRepository.createTable(db);
+        await billRepository.createTable(db);
 
         if (kDebugMode) {
           print('Tables created');
