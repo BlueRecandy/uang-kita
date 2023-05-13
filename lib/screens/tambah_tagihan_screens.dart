@@ -156,6 +156,8 @@ class _TambahTagihanScreenState extends State<TambahTagihanScreen> {
                 ),
                 ElevatedButton(
                     onPressed: () {
+                      // TODO: Validasi disini gan
+
                       String judul = _judulController.text;
                       int jumlah = int.parse(_jumlahController.text);
                       String kategori = _kategoriController.text;
