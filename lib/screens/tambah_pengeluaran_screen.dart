@@ -18,7 +18,10 @@ class _TambahPengeluaranScreenState extends State<TambahPengeluaranScreen> {
   // Deklarasi variabel untuk textfield judul
   final TextEditingController titleController = TextEditingController();
   FocusNode titleFocusNode = FocusNode();
-  // Deklarasi variabel untuk dropdown katagori
+
+  // Deklarasi variabel untuk dropdown
+  // TODO: Ganti tipe data dengan CategoryType?
+  // TODO: Ganti nama variabel dengan selectedCategory
   String? selectedItem;
   // List untuk dropdown katagori
   final katagoriList = CategoryType.values
@@ -93,7 +96,13 @@ class _TambahPengeluaranScreenState extends State<TambahPengeluaranScreen> {
               }),
           // button save
           const SizedBox(height: 70),
-          const SaveButton(),
+          SaveButton(
+            onTap: () async {
+              // TODO: Validasi data yang akan di input
+
+              // TODO: Simpan data ke database
+            },
+          ),
         ],
       ),
     );
