@@ -20,9 +20,7 @@ class _TambahPengeluaranScreenState extends State<TambahPengeluaranScreen> {
   FocusNode titleFocusNode = FocusNode();
 
   // Deklarasi variabel untuk dropdown
-  // TODO: Ganti tipe data dengan CategoryType?
-  // TODO: Ganti nama variabel dengan selectedCategory
-  String? selectedItem;
+  CategoryType? selectedCategory;
   // List untuk dropdown katagori
   final katagoriList = CategoryType.values
       .map((e) => CategoryTypeModel(type: e, icon: e.icon))
@@ -75,7 +73,7 @@ class _TambahPengeluaranScreenState extends State<TambahPengeluaranScreen> {
             hint: 'Kategori',
             onChanged: (value) {
               setState(() {
-                selectedItem = value;
+                selectedCategory = value;
               });
             },
           ),
