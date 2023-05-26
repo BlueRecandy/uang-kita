@@ -36,10 +36,10 @@ class _TambahTagihanScreenState extends State<TambahTagihanScreen> {
     return TextFormField(
       controller: controller,
       decoration: InputDecoration(
-        labelText: label,
-        filled: true,
-        fillColor: const Color.fromARGB(255, 235, 235, 235),
-      ),
+          labelText: label,
+          filled: true,
+          fillColor: const Color.fromARGB(255, 235, 235, 235),
+          errorStyle: TextStyle(color: Colors.red, fontSize: 13.0)),
       validator: (value) {
         if (value == null || value.isEmpty) {
           return errorMessage ?? '$label tidak boleh kosong';
@@ -56,10 +56,10 @@ class _TambahTagihanScreenState extends State<TambahTagihanScreen> {
     return TextFormField(
       controller: controller,
       decoration: InputDecoration(
-        labelText: label,
-        filled: true,
-        fillColor: const Color.fromARGB(255, 235, 235, 235),
-      ),
+          labelText: label,
+          filled: true,
+          fillColor: const Color.fromARGB(255, 235, 235, 235),
+          errorStyle: TextStyle(color: Colors.red, fontSize: 13.0)),
       keyboardType: TextInputType.number,
       inputFormatters: [
         FilteringTextInputFormatter.digitsOnly,
@@ -157,7 +157,13 @@ class _TambahTagihanScreenState extends State<TambahTagihanScreen> {
                 ElevatedButton(
                     onPressed: () {
                       // TODO: Validasi disini gan
-
+                      if (_formKey.currentState!.validate()) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Berhasil ditambah')));
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Kolom kosong')));
+                      }
                       String judul = _judulController.text;
                       int jumlah = int.parse(_jumlahController.text);
                       String kategori = _kategoriController.text;
