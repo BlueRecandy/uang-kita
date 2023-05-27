@@ -28,32 +28,35 @@ class _DaftarPengeluaranScreenState extends State<DaftarPengeluaranScreen> {
   void initState() {
     super.initState();
 
-    loadExpense();
+    _loadExpense();
   }
 
-  Future<void> loadExpense() async {
-    final sqlite = SQLite.getInstance();
-    final db = await sqlite.database;
-
-    final currentMonthRange = DateTimeRange(
-        start: DateTime(now.year, now.month, 1),
-        end: DateTime(now.year, now.month + 1, 0));
-
-    final expenses =
-        await sqlite.expenseRepository.findInDateRange(db, currentMonthRange);
-
-    final int currentMonthExpense = -expenses.fold<int>(
-        0, (previousValue, element) => previousValue + element.amount);
+  Future<void> _loadExpense() async {
+    final expenses = await _retrieveExpenses(currentDateRange);
 
     setState(() {
       expenseList.clear();
       expenseList.addAll(expenses);
 
-      monthlyExpense = currentMonthExpense;
+      monthlyExpense = _calculateCurrentMonthExpense(expenses);
     });
   }
 
-  void showExpensePeriodDialog() async {
+  int _calculateCurrentMonthExpense(List<Expense> expenses) {
+    final int currentMonthExpense = -expenses.fold<int>(
+        0, (previousValue, element) => previousValue + element.amount);
+
+    return currentMonthExpense;
+  }
+
+  Future<List<Expense>> _retrieveExpenses(DateTimeRange rangeTime) async {
+    final sqlite = SQLite.getInstance();
+    final db = await sqlite.database;
+
+    return await sqlite.expenseRepository.findInDateRange(db, rangeTime);
+  }
+
+  void _showExpensePeriodDialog() async {
     final dateRange = await showDateRangePicker(
       context: context,
       firstDate: now.subtract(const Duration(days: 365)),
@@ -68,6 +71,8 @@ class _DaftarPengeluaranScreenState extends State<DaftarPengeluaranScreen> {
     setState(() {
       currentDateRange = dateRange;
     });
+
+    _loadExpense();
   }
 
   @override
@@ -78,7 +83,10 @@ class _DaftarPengeluaranScreenState extends State<DaftarPengeluaranScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CardWidget(expense: monthlyExpense),
+            CardWidget(
+              expense: monthlyExpense,
+              currentPeriod: currentDateRange,
+            ),
             Padding(
               padding: EdgeInsets.only(
                 top: 2.h,
@@ -88,7 +96,7 @@ class _DaftarPengeluaranScreenState extends State<DaftarPengeluaranScreen> {
                 children: [
                   IconButtonWidget(
                       icon: HeroIcons.calendar,
-                      onPressed: showExpensePeriodDialog),
+                      onPressed: _showExpensePeriodDialog),
                   IconButtonWidget(
                       icon: HeroIcons.plus,
                       onPressed: () {
