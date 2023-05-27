@@ -1,12 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:uang_kita/models/bill_model.dart';
 import 'package:uang_kita/repositories/bill_repository.dart';
+import 'package:uang_kita/repositories/expense_repository.dart';
+import 'package:uang_kita/repositories/interfaces/interface_bill_repository.dart';
 import 'package:uang_kita/repositories/interfaces/interface_expense_repository.dart';
-
-import '../repositories/expense_repository.dart';
-import '../repositories/interfaces/interface_repository.dart';
 
 class SQLite {
   static final SQLite _instance = SQLite._internal();
@@ -17,7 +15,7 @@ class SQLite {
 
   // Repositories
   late IExpenseRepository expenseRepository;
-  late IRepository<Bill, int> billRepository;
+  late IBillRepository billRepository;
 
   SQLite._internal() {
     if (kDebugMode) {
