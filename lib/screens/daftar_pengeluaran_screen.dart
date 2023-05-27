@@ -19,6 +19,11 @@ class _DaftarPengeluaranScreenState extends State<DaftarPengeluaranScreen> {
   final List<Expense> expenseList = [];
   int monthlyExpense = 0;
 
+  DateTime now = DateTime.now();
+  DateTimeRange currentDateRange = DateTimeRange(
+      start: DateTime(DateTime.now().year, DateTime.now().month, 1),
+      end: DateTime.now());
+
   @override
   void initState() {
     super.initState();
@@ -30,16 +35,14 @@ class _DaftarPengeluaranScreenState extends State<DaftarPengeluaranScreen> {
     final sqlite = SQLite.getInstance();
     final db = await sqlite.database;
 
-    final expenses = await sqlite.expenseRepository.findAll(db);
+    final currentMonthRange = DateTimeRange(
+        start: DateTime(now.year, now.month, 1),
+        end: DateTime(now.year, now.month + 1, 0));
 
-    final now = DateTime.now();
+    final expenses =
+        await sqlite.expenseRepository.findInDateRange(db, currentMonthRange);
 
-    final thisMonthExpense = expenses
-        .where((expense) =>
-            expense.date.month == now.month && expense.date.year == now.year)
-        .toList();
-
-    final int currentMonthExpense = -thisMonthExpense.fold<int>(
+    final int currentMonthExpense = -expenses.fold<int>(
         0, (previousValue, element) => previousValue + element.amount);
 
     setState(() {
@@ -47,6 +50,23 @@ class _DaftarPengeluaranScreenState extends State<DaftarPengeluaranScreen> {
       expenseList.addAll(expenses);
 
       monthlyExpense = currentMonthExpense;
+    });
+  }
+
+  void showExpensePeriodDialog() async {
+    final dateRange = await showDateRangePicker(
+      context: context,
+      firstDate: now.subtract(const Duration(days: 365)),
+      lastDate: now,
+      initialDateRange: currentDateRange,
+    );
+
+    if (dateRange == null) {
+      return;
+    }
+
+    setState(() {
+      currentDateRange = dateRange;
     });
   }
 
@@ -67,7 +87,8 @@ class _DaftarPengeluaranScreenState extends State<DaftarPengeluaranScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButtonWidget(
-                      icon: HeroIcons.bars3BottomLeft, onPressed: () {}),
+                      icon: HeroIcons.calendar,
+                      onPressed: showExpensePeriodDialog),
                   IconButtonWidget(
                       icon: HeroIcons.plus,
                       onPressed: () {
