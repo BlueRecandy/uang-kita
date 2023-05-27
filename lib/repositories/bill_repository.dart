@@ -10,7 +10,7 @@ class BillRepository extends IRepository<Bill, int> {
   @override
   Future<void> createTable(Database db) {
     return db.execute(
-        'CREATE TABLE $tableName (id INTEGER PRIMARY KEY, title TEXT, amount INTEGER, due_date DATETIME, category TEXT)');
+        'CREATE TABLE $tableName (id INTEGER PRIMARY KEY AUTO INCREMENT, title TEXT, amount INTEGER, due_date DATETIME, category TEXT)');
   }
 
   @override
