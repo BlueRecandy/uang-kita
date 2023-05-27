@@ -1,11 +1,9 @@
-import 'package:flutter/src/material/date.dart';
+import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:uang_kita/models/category_type_model.dart';
 import 'package:uang_kita/models/expense_model.dart';
 import 'package:uang_kita/repositories/interfaces/interface_expense_repository.dart';
 import 'package:uang_kita/utils/model_utils.dart';
-
-import 'interfaces/interface_repository.dart';
 
 class ExpenseRepository implements IExpenseRepository {
   final tableName = 'expenses';
