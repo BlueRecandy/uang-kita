@@ -6,6 +6,7 @@ import 'package:uang_kita/repositories/bill_repository.dart';
 import 'package:uang_kita/repositories/interfaces/interface_expense_repository.dart';
 
 import '../repositories/expense_repository.dart';
+import '../repositories/interfaces/interface_repository.dart';
 
 class SQLite {
   static final SQLite _instance = SQLite._internal();
