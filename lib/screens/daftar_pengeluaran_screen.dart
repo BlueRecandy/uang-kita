@@ -19,35 +19,60 @@ class _DaftarPengeluaranScreenState extends State<DaftarPengeluaranScreen> {
   final List<Expense> expenseList = [];
   int monthlyExpense = 0;
 
+  DateTime now = DateTime.now();
+  DateTimeRange currentDateRange = DateTimeRange(
+      start: DateTime(DateTime.now().year, DateTime.now().month, 1),
+      end: DateTime.now());
+
   @override
   void initState() {
     super.initState();
 
-    loadExpense();
+    _loadExpense();
   }
 
-  Future<void> loadExpense() async {
-    final sqlite = SQLite.getInstance();
-    final db = await sqlite.database;
-
-    final expenses = await sqlite.expenseRepository.findAll(db);
-
-    final now = DateTime.now();
-
-    final thisMonthExpense = expenses
-        .where((expense) =>
-            expense.date.month == now.month && expense.date.year == now.year)
-        .toList();
-
-    final int currentMonthExpense = -thisMonthExpense.fold<int>(
-        0, (previousValue, element) => previousValue + element.amount);
+  Future<void> _loadExpense() async {
+    final expenses = await _retrieveExpenses(currentDateRange);
 
     setState(() {
       expenseList.clear();
       expenseList.addAll(expenses);
 
-      monthlyExpense = currentMonthExpense;
+      monthlyExpense = _calculateCurrentMonthExpense(expenses);
     });
+  }
+
+  int _calculateCurrentMonthExpense(List<Expense> expenses) {
+    final int currentMonthExpense = -expenses.fold<int>(
+        0, (previousValue, element) => previousValue + element.amount);
+
+    return currentMonthExpense;
+  }
+
+  Future<List<Expense>> _retrieveExpenses(DateTimeRange rangeTime) async {
+    final sqlite = SQLite.getInstance();
+    final db = await sqlite.database;
+
+    return await sqlite.expenseRepository.findInDateRange(db, rangeTime);
+  }
+
+  void _showExpensePeriodDialog() async {
+    final dateRange = await showDateRangePicker(
+      context: context,
+      firstDate: now.subtract(const Duration(days: 365)),
+      lastDate: now,
+      initialDateRange: currentDateRange,
+    );
+
+    if (dateRange == null) {
+      return;
+    }
+
+    setState(() {
+      currentDateRange = dateRange;
+    });
+
+    _loadExpense();
   }
 
   @override
@@ -58,7 +83,10 @@ class _DaftarPengeluaranScreenState extends State<DaftarPengeluaranScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CardWidget(expense: monthlyExpense),
+            CardWidget(
+              expense: monthlyExpense,
+              currentPeriod: currentDateRange,
+            ),
             Padding(
               padding: EdgeInsets.only(
                 top: 2.h,
@@ -67,7 +95,8 @@ class _DaftarPengeluaranScreenState extends State<DaftarPengeluaranScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButtonWidget(
-                      icon: HeroIcons.bars3BottomLeft, onPressed: () {}),
+                      icon: HeroIcons.calendar,
+                      onPressed: _showExpensePeriodDialog),
                   IconButtonWidget(
                       icon: HeroIcons.plus,
                       onPressed: () {

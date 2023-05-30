@@ -1,17 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
+import 'package:uang_kita/db/sqlite.dart';
+import 'package:uang_kita/models/bill_model.dart';
 import 'package:uang_kita/screens/tambah_tagihan_screens.dart';
 import 'package:uang_kita/widgets/screens/daftar_tagihan/tagihan_item_widget.dart';
 
-class DaftarTagihanPage extends StatelessWidget {
-  const DaftarTagihanPage({super.key});
+class DaftarTagihanScreen extends StatefulWidget {
+  const DaftarTagihanScreen({super.key});
+
+  @override
+  State<DaftarTagihanScreen> createState() => _DaftarTagihanScreenState();
+}
+
+class _DaftarTagihanScreenState extends State<DaftarTagihanScreen> {
+  final List<Bill> daftarTagihan = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadTagihan();
+  }
+
+  void loadTagihan() async {
+    final sqlite = SQLite.getInstance();
+    final db = await sqlite.database;
+
+    final result = await sqlite.billRepository.findAll(db);
+
+    setState(() {
+      daftarTagihan.clear();
+      daftarTagihan.addAll(result);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    void _toTambahPengeluaran(BuildContext context) {
+    void toTambahPengeluaran(BuildContext context) {
       Navigator.of(context).push(MaterialPageRoute(builder: (context) {
         return const TambahTagihanScreen();
-      }));
+      })).then((value) => loadTagihan());
     }
 
     return Scaffold(
@@ -19,20 +46,19 @@ class DaftarTagihanPage extends StatelessWidget {
         title: const Text('Daftar Tagihan'),
       ),
       floatingActionButton: FloatingActionButton(
-          onPressed: () => _toTambahPengeluaran(context),
+          onPressed: () => toTambahPengeluaran(context),
           child: const HeroIcon(HeroIcons.plus)),
-      body: ListView(
-        children: const <Widget>[
-          TagihanItemWidget(
-              price: 12000,
-              title: 'Pecel Lele',
-              description: 'Pesanan yang harus dibayar'),
-          TagihanItemWidget(
-              price: 20000,
-              title: 'Laundry',
-              description: 'Pesanan yang harus dibayar'),
-        ],
-      ),
+      body: daftarTagihan.isEmpty
+          ? const Center(
+              child: Text('Tidak ada tagihan'),
+            )
+          : ListView(
+              children: daftarTagihan
+                  .map((tagihan) => TagihanItemWidget(
+                        tagihan: tagihan,
+                      ))
+                  .toList(),
+            ),
     );
   }
 }

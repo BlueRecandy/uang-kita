@@ -1,11 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:uang_kita/models/category_type_model.dart';
 import 'package:uang_kita/models/expense_model.dart';
+import 'package:uang_kita/repositories/interfaces/interface_expense_repository.dart';
 import 'package:uang_kita/utils/model_utils.dart';
 
-import 'interfaces/interface_repository.dart';
-
-class ExpenseRepository extends IRepository<Expense, int> {
+class ExpenseRepository implements IExpenseRepository {
   final tableName = 'expenses';
 
   @override
@@ -38,8 +38,10 @@ class ExpenseRepository extends IRepository<Expense, int> {
   }
 
   @override
-  Future<List<Expense>> findAll(Database db) async {
-    final expenseRecords = await db.query(tableName, orderBy: 'date DESC');
+  Future<List<Expense>> findAll(Database db,
+      {bool isDescendingDate = true}) async {
+    final expenseRecords = await db.query(tableName,
+        orderBy: isDescendingDate ? 'date DESC' : 'date ASC');
 
     final List<Expense> expenses = [];
 
@@ -58,32 +60,49 @@ class ExpenseRepository extends IRepository<Expense, int> {
   }
 
   @override
-  Future<Expense?> findById(Database db, int id) async {
-    final result = await db.query(tableName, where: 'id = ?', whereArgs: [id]);
+  Future<Expense> findEarliest(Database db) async {
+    final result = await db.query(tableName, orderBy: 'date ASC', limit: 1);
 
     if (result.isEmpty) {
-      return null;
+      throw Exception('Data tidak ditemukan');
     }
 
-    final expenseRaw = result.first;
-
-    final expense = ModelUtils.mapToExpense(expenseRaw);
-
-    return expense;
+    return ModelUtils.mapToExpense(result.first);
   }
 
   @override
-  Future<List<Expense>> findMany(Database db) async {
-    final result = await db.query(tableName, orderBy: 'date DESC');
+  Future<Expense> findLatest(Database db) async {
+    final result = await db.query(tableName, orderBy: 'date DESC', limit: 1);
 
-    final List<Expense> expenses = [];
-
-    for (var element in result) {
-      final expense = ModelUtils.mapToExpense(element);
-
-      expenses.add(expense);
+    if (result.isEmpty) {
+      throw Exception('Data tidak ditemukan');
     }
 
-    return expenses;
+    return ModelUtils.mapToExpense(result.first);
+  }
+
+  @override
+  Future<List<Expense>> findInDateRange(Database db, DateTimeRange dateRange,
+      {int limit = 60, bool isDescendingDate = true}) {
+    final startDate = dateRange.start.toIso8601String();
+    final endDate = dateRange.end.toIso8601String();
+
+    return db
+        .query(tableName,
+            where: 'date BETWEEN ? AND ?',
+            whereArgs: [startDate, endDate],
+            orderBy: isDescendingDate ? 'date DESC' : 'date ASC',
+            limit: limit)
+        .then((value) {
+      final List<Expense> expenses = [];
+
+      for (var element in value) {
+        final expense = ModelUtils.mapToExpense(element);
+
+        expenses.add(expense);
+      }
+
+      return expenses;
+    });
   }
 }
