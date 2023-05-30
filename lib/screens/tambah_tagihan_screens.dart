@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:uang_kita/db/sqlite.dart';
 import 'package:uang_kita/models/category_type_model.dart';
 
 class TambahTagihanScreen extends StatefulWidget {
@@ -16,9 +17,15 @@ class _TambahTagihanScreenState extends State<TambahTagihanScreen> {
   final _judulController = TextEditingController();
   final _jumlahController = TextEditingController();
   final _jatuhTempoController = TextEditingController();
-  final _kategoriController = TextEditingController();
+  final _kategoriController = TextEditingController(text: getKategori().first);
 
-  DateTime? _jatuhTempo;
+  DateTime? jatuhTempo;
+
+  static List<String> getKategori() {
+    List<String> kategori =
+        CategoryType.values.map((e) => e.displayName).toList();
+    return kategori;
+  }
 
   @override
   void dispose() {
@@ -39,7 +46,7 @@ class _TambahTagihanScreenState extends State<TambahTagihanScreen> {
           labelText: label,
           filled: true,
           fillColor: const Color.fromARGB(255, 235, 235, 235),
-          errorStyle: TextStyle(color: Colors.red, fontSize: 13.0)),
+          errorStyle: const TextStyle(color: Colors.red, fontSize: 13.0)),
       validator: (value) {
         if (value == null || value.isEmpty) {
           return errorMessage ?? '$label tidak boleh kosong';
@@ -59,7 +66,7 @@ class _TambahTagihanScreenState extends State<TambahTagihanScreen> {
           labelText: label,
           filled: true,
           fillColor: const Color.fromARGB(255, 235, 235, 235),
-          errorStyle: TextStyle(color: Colors.red, fontSize: 13.0)),
+          errorStyle: const TextStyle(color: Colors.red, fontSize: 13.0)),
       keyboardType: TextInputType.number,
       inputFormatters: [
         FilteringTextInputFormatter.digitsOnly,
@@ -78,8 +85,15 @@ class _TambahTagihanScreenState extends State<TambahTagihanScreen> {
       controller: _jatuhTempoController,
       decoration: const InputDecoration(
         labelText: "Jatuh Tempo",
+        errorStyle: TextStyle(color: Colors.red, fontSize: 13.0),
       ),
       readOnly: true,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Jatuh tempo tidak boleh kosong';
+        }
+        return null;
+      },
       onTap: () async {
         final DateTime? picked = await showDatePicker(
             context: context,
@@ -88,7 +102,7 @@ class _TambahTagihanScreenState extends State<TambahTagihanScreen> {
             lastDate: DateTime(2027));
         if (picked != null) {
           setState(() {
-            _jatuhTempo = picked;
+            jatuhTempo = picked;
             final String formattedDate =
                 "${picked.day}/${picked.month}/${picked.year}";
             _jatuhTempoController.text = formattedDate;
@@ -98,12 +112,31 @@ class _TambahTagihanScreenState extends State<TambahTagihanScreen> {
     );
   }
 
-  final _dropdownCategoryItems = CategoryType.values
-      .map((e) => DropdownMenuItem(
-            value: e.displayName,
-            child: Text(e.displayName),
-          ))
-      .toList();
+  bool _isInputValid() {
+    return _formKey.currentState!.validate();
+  }
+
+  Map<String, dynamic> prepareData() {
+    String kategoriRaw = _kategoriController.value.text;
+    CategoryType kategori = categoryTypeMap.values
+        .where((element) => element.displayName == kategoriRaw)
+        .first;
+
+    final data = {
+      'title': _judulController.value.text,
+      'amount': int.parse(_jumlahController.value.text),
+      'due_date': jatuhTempo!.toIso8601String(),
+      'category': kategori
+    };
+
+    return data;
+  }
+
+  void showSuccessResponse() {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(const SnackBar(content: Text('Tagihan ditambah')));
+    Navigator.of(context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -140,11 +173,11 @@ class _TambahTagihanScreenState extends State<TambahTagihanScreen> {
                       filled: true,
                       fillColor: Color.fromARGB(255, 235, 235, 235),
                     ),
-                    value: _dropdownCategoryItems.first.value,
-                    items: CategoryType.values
-                        .map((e) => DropdownMenuItem(
-                              value: e.displayName,
-                              child: Text(e.displayName),
+                    value: _kategoriController.value.text,
+                    items: getKategori()
+                        .map((kategori) => DropdownMenuItem(
+                              value: kategori,
+                              child: Text(kategori),
                             ))
                         .toList(),
                     onChanged: (value) {
@@ -155,26 +188,25 @@ class _TambahTagihanScreenState extends State<TambahTagihanScreen> {
                   ),
                 ),
                 ElevatedButton(
-                    onPressed: () {
-                      // TODO: Validasi disini gan
-                      if (_formKey.currentState!.validate()) {
+                    onPressed: () async {
+                      if (!_isInputValid()) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Berhasil ditambah')));
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Kolom kosong')));
+                            const SnackBar(
+                                content: Text(
+                                    'Mohon isi semua field dengan benar')));
+                        return;
                       }
-                      String judul = _judulController.text;
-                      int jumlah = int.parse(_jumlahController.text);
-                      String kategori = _kategoriController.text;
 
-                      // TODO: Do something with the data, e.g. add to a database
-                      print('Judul: $judul');
-                      print('Jumlah: $jumlah');
-                      print('Jatuh Tempo: $_jatuhTempo');
-                      print('Kategori: $kategori');
+                      final data = prepareData();
+
+                      final sqlite = SQLite.getInstance();
+                      final db = await sqlite.database;
+
+                      await sqlite.billRepository.insert(db, data);
+
+                      showSuccessResponse();
                     },
-                    child: const Text('Tambah'))
+                    child: const Text('Tambah')),
               ],
             ),
           )),
