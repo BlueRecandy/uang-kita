@@ -1,29 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:uang_kita/models/bill_model.dart';
 
 class TagihanItemWidget extends StatelessWidget {
-  const TagihanItemWidget(
-      {super.key,
-      required this.price,
-      required this.title,
-      required this.description});
+  const TagihanItemWidget({super.key, required this.tagihan});
 
-  final int price;
-  final String title;
-  final String description;
+  final Bill tagihan;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(
-        title,
+        tagihan.title,
         style: Theme.of(context)
             .textTheme
             .labelLarge
             ?.copyWith(fontWeight: FontWeight.bold),
-      ),
-      subtitle: Text(
-        description,
-        style: Theme.of(context).textTheme.labelMedium,
       ),
       trailing: TextButton(
         style: ButtonStyle(
@@ -32,13 +23,12 @@ class TagihanItemWidget extends StatelessWidget {
         ),
         onPressed: () {},
         child: Text(
-          'Rp. $price',
+          'Rp. ${tagihan.amount}',
           style: Theme.of(context).textTheme.labelMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
         ),
       ),
-      isThreeLine: true,
       onTap: () {
         print("On Tap is fired");
       },

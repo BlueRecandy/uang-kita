@@ -38,7 +38,7 @@ class _DaftarTagihanScreenState extends State<DaftarTagihanScreen> {
     void toTambahPengeluaran(BuildContext context) {
       Navigator.of(context).push(MaterialPageRoute(builder: (context) {
         return const TambahTagihanScreen();
-      }));
+      })).then((value) => loadTagihan());
     }
 
     return Scaffold(
