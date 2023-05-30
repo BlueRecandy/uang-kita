@@ -5,7 +5,7 @@ import '../../../models/category_type_model.dart';
 class DropdownCategoryItems extends StatefulWidget {
   final List<CategoryTypeModel> items;
   final String hint;
-  final Function(CategoryType?) onChanged;
+  final Function(String?) onChanged;
 
   const DropdownCategoryItems({
     Key? key,
