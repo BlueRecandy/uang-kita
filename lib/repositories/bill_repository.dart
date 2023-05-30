@@ -10,7 +10,7 @@ class BillRepository extends IBillRepository {
   @override
   Future<void> createTable(Database db) {
     return db.execute(
-        'CREATE TABLE $tableName (id INTEGER PRIMARY KEY AUTO INCREMENT, title TEXT, amount INTEGER, due_date DATETIME, category TEXT)');
+        'CREATE TABLE $tableName (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, amount INTEGER, due_date DATETIME, category TEXT)');
   }
 
   @override
@@ -20,7 +20,7 @@ class BillRepository extends IBillRepository {
 
   @override
   Future<List<Bill>> findAll(Database db) {
-    return db.query(tableName, orderBy: 'date DESC').then((records) {
+    return db.query(tableName, orderBy: 'due_date DESC').then((records) {
       return records.map((record) => ModelUtils.mapToBill(record)).toList();
     });
   }
