@@ -15,7 +15,7 @@ class DropdownCategoryItems extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _DropdownCategoryItemsState createState() => _DropdownCategoryItemsState();
+  State<DropdownCategoryItems> createState() => _DropdownCategoryItemsState();
 }
 
 class _DropdownCategoryItemsState extends State<DropdownCategoryItems> {
@@ -32,7 +32,7 @@ class _DropdownCategoryItemsState extends State<DropdownCategoryItems> {
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
             width: 2,
-            color: Color(0xffC5C5C5),
+            color: const Color(0xffC5C5C5),
           ),
         ),
         child: DropdownButtonFormField<String>(

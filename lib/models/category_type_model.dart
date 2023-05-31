@@ -36,21 +36,21 @@ extension CategoryTypeExtension on CategoryType {
   String get displayName {
     switch (this) {
       case CategoryType.foodAndDrink:
-        return "Makan & Minum";
+        return "foodAndDrink";
       case CategoryType.transportation:
-        return "Transportasi";
+        return "transportation";
       case CategoryType.clothing:
-        return "Pakaian";
+        return "clothing";
       case CategoryType.entertainment:
-        return "Hiburan";
+        return "entertainment";
       case CategoryType.health:
-        return "Kesehatan";
+        return "health";
       case CategoryType.education:
-        return "Pendidikan";
+        return "education";
       case CategoryType.others:
-        return "Lainnya";
+        return "others";
       case CategoryType.dailyNeeds:
-        return "Kebutuhan Harian";
+        return "dailyNeeds";
     }
   }
 }

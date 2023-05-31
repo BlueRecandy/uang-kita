@@ -27,12 +27,13 @@ class _DaftarPengeluaranScreenState extends State<DaftarPengeluaranScreen> {
   @override
   void initState() {
     super.initState();
-
     _loadExpense();
   }
 
   Future<void> _loadExpense() async {
     final expenses = await _retrieveExpenses(currentDateRange);
+
+    print('Expenses (${expenses.length})');
 
     setState(() {
       expenseList.clear();
@@ -53,26 +54,39 @@ class _DaftarPengeluaranScreenState extends State<DaftarPengeluaranScreen> {
     final sqlite = SQLite.getInstance();
     final db = await sqlite.database;
 
-    return await sqlite.expenseRepository.findInDateRange(db, rangeTime);
+    final expenses =
+        await sqlite.expenseRepository.findInDateRange(db, rangeTime);
+
+    return expenses;
   }
 
   void _showExpensePeriodDialog() async {
-    final dateRange = await showDateRangePicker(
+    final currentDate = DateTime(now.year, now.month, now.day, 0, 0, 0);
+    final firstDate = currentDate.subtract(const Duration(days: 365));
+    final lastDate =
+        currentDate.add(const Duration(hours: 23, minutes: 59, seconds: 59));
+
+    final selectedRange = await showDateRangePicker(
       context: context,
-      firstDate: now.subtract(const Duration(days: 365)),
-      lastDate: now,
+      firstDate: firstDate,
+      lastDate: lastDate,
       initialDateRange: currentDateRange,
     );
 
-    if (dateRange == null) {
+    if (selectedRange == null) {
       return;
     }
+
+    final dateRange = DateTimeRange(
+        start: selectedRange.start,
+        end: selectedRange.end
+            .add(const Duration(hours: 23, minutes: 59, seconds: 59)));
 
     setState(() {
       currentDateRange = dateRange;
     });
 
-    _loadExpense();
+    await _loadExpense();
   }
 
   @override
@@ -100,9 +114,13 @@ class _DaftarPengeluaranScreenState extends State<DaftarPengeluaranScreen> {
                   IconButtonWidget(
                       icon: HeroIcons.plus,
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>
-                                const TambahPengeluaranScreen()));
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(
+                                builder: (context) =>
+                                    const TambahPengeluaranScreen()))
+                            .then((value) {
+                          _loadExpense();
+                        });
                       })
                 ],
               ),
