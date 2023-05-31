@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:uang_kita/db/sqlite.dart';
 import 'package:uang_kita/models/category_type_model.dart';
-import 'package:uang_kita/screens/daftar_pengeluaran_screen.dart';
+
 import '../widgets/screens/tambah_pengeluaran/save_button.dart';
 import '../widgets/screens/tambah_pengeluaran/textfield_judul.dart';
 import '../widgets/screens/tambah_pengeluaran/textfield_jumlah.dart';
@@ -31,7 +31,7 @@ class _TambahPengeluaranScreenState extends State<TambahPengeluaranScreen> {
   final TextEditingController amountController = TextEditingController();
   final FocusNode amountFocusNode = FocusNode();
   // Deklarasi variabel untuk textfield tanggal
-  DateTime initialDate = DateTime.now();
+  DateTime expenseDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +51,31 @@ class _TambahPengeluaranScreenState extends State<TambahPengeluaranScreen> {
         ),
       ),
     );
+  }
+
+  bool isInputValid() {
+    final isTitleEmpty = titleController.value.text.isEmpty;
+    final isCategoryEmpty = selectedCategory == null;
+    final isAmountEmpty = amountController.value.text.isEmpty;
+
+    return !isTitleEmpty && !isCategoryEmpty && !isAmountEmpty;
+  }
+
+  void showInvalidResponse() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Data tidak boleh kosong'),
+      ),
+    );
+  }
+
+  void showSuccessResponse() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Data berhasil disimpan'),
+      ),
+    );
+    Navigator.of(context).pop();
   }
 
   // Method untuk membuat main container
@@ -74,15 +99,12 @@ class _TambahPengeluaranScreenState extends State<TambahPengeluaranScreen> {
             items: katagoriList,
             hint: 'Kategori',
             onChanged: (value) {
+              final category = categoryTypeMap.values
+                  .where((element) => element.displayName == value)
+                  .first;
+
               setState(() {
-                // selectedCategory = CategoryType.values
-                //     .firstWhere((element) => element.displayName == value);
-                // selectedCategory = categoryTypeMap.entries
-                //     .firstWhere((entry) => entry.value == value)
-                //     .key;
-                //print(value);
-                selectedCategory = categoryTypeMap[value];
-                print(selectedCategory);
+                selectedCategory = category;
               });
             },
           ),
@@ -95,49 +117,35 @@ class _TambahPengeluaranScreenState extends State<TambahPengeluaranScreen> {
           // textfield tanggal
           const SizedBox(height: 30),
           DateTimePicker(
-              initialDate: initialDate,
+              initialDate: expenseDate,
               onDateChanged: (value) {
                 setState(() {
-                  initialDate = value;
+                  expenseDate = value;
                 });
               }),
           // button save
           const SizedBox(height: 70),
           SaveButton(
             onTap: () async {
-              // TODO: Validasi data yang akan di input
-              print(titleController.value.text);
-              print(selectedCategory);
-              print(amountController.value.text);
-
-              if (titleController.value.text.isEmpty ||
-                  selectedCategory == null ||
-                  amountController.value.text.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Data tidak boleh kosong'),
-                  ),
-                );
+              // Validasi input
+              if (!isInputValid()) {
+                showInvalidResponse();
                 return;
-              } else {
-                // TODO: Simpan data ke database
-                final sqlite = SQLite.getInstance();
-                final db = await sqlite.database;
-                await sqlite.expenseRepository.insert(db, {
-                  'title': titleController.value.text,
-                  'category': selectedCategory,
-                  'amount': amountController.value.text,
-                });
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Data berhasil disimpan'),
-                  ),
-                );
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => DaftarPengeluaranScreen()));
               }
+
+              // Mendapatkan koneksi database
+              final sqlite = SQLite.getInstance();
+              final db = await sqlite.database;
+
+              // Menyimpan data
+              await sqlite.expenseRepository.insert(db, {
+                'title': titleController.value.text,
+                'category': selectedCategory,
+                'amount': amountController.value.text,
+                'date': expenseDate,
+              });
+
+              showSuccessResponse();
             },
           ),
         ],

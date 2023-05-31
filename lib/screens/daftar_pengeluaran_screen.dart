@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:sizer/sizer.dart';
 import 'package:uang_kita/db/sqlite.dart';
+import 'package:uang_kita/models/category_type_model.dart';
 import 'package:uang_kita/models/expense_model.dart';
 import 'package:uang_kita/screens/tambah_pengeluaran_screen.dart';
 import 'package:uang_kita/widgets/icon_button_widget.dart';
@@ -27,12 +28,13 @@ class _DaftarPengeluaranScreenState extends State<DaftarPengeluaranScreen> {
   @override
   void initState() {
     super.initState();
-
     _loadExpense();
   }
 
   Future<void> _loadExpense() async {
     final expenses = await _retrieveExpenses(currentDateRange);
+
+    print('Expenses (${expenses.length})');
 
     setState(() {
       expenseList.clear();
@@ -53,7 +55,11 @@ class _DaftarPengeluaranScreenState extends State<DaftarPengeluaranScreen> {
     final sqlite = SQLite.getInstance();
     final db = await sqlite.database;
 
-    return await sqlite.expenseRepository.findInDateRange(db, rangeTime);
+    // TODO: FIX RANGE TIME. MAKE THE END DATE TIME INTO END OF THE DAY (23:59:59)
+    final expenses =
+        await sqlite.expenseRepository.findInDateRange(db, rangeTime);
+
+    return expenses;
   }
 
   void _showExpensePeriodDialog() async {
@@ -71,6 +77,20 @@ class _DaftarPengeluaranScreenState extends State<DaftarPengeluaranScreen> {
     setState(() {
       currentDateRange = dateRange;
     });
+
+    await _loadExpense();
+  }
+
+  void _testInsertExpense() async {
+    final expense = {
+      'title': 'Kopi ABC',
+      'amount': 15000,
+      'category': CategoryType.foodAndDrink
+    };
+
+    final sqlite = SQLite.getInstance();
+    final db = await sqlite.database;
+    await sqlite.expenseRepository.insert(db, expense);
 
     _loadExpense();
   }
@@ -98,11 +118,18 @@ class _DaftarPengeluaranScreenState extends State<DaftarPengeluaranScreen> {
                       icon: HeroIcons.calendar,
                       onPressed: _showExpensePeriodDialog),
                   IconButtonWidget(
+                      icon: HeroIcons.documentMagnifyingGlass,
+                      onPressed: _testInsertExpense),
+                  IconButtonWidget(
                       icon: HeroIcons.plus,
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>
-                                const TambahPengeluaranScreen()));
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(
+                                builder: (context) =>
+                                    const TambahPengeluaranScreen()))
+                            .then((value) {
+                          _loadExpense();
+                        });
                       })
                 ],
               ),
