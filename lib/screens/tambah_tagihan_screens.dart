@@ -118,7 +118,7 @@ class _TambahTagihanScreenState extends State<TambahTagihanScreen> {
 
   Map<String, dynamic> prepareData() {
     String kategoriRaw = _kategoriController.value.text;
-    CategoryType kategori = categoryTypeMap.values
+    CategoryType kategori = CategoryType.values
         .where((element) => element.displayName == kategoriRaw)
         .first;
 

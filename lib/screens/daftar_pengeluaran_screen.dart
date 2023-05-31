@@ -22,7 +22,8 @@ class _DaftarPengeluaranScreenState extends State<DaftarPengeluaranScreen> {
   DateTime now = DateTime.now();
   DateTimeRange currentDateRange = DateTimeRange(
       start: DateTime(DateTime.now().year, DateTime.now().month, 1),
-      end: DateTime.now());
+      end: DateTime(DateTime.now().year, DateTime.now().month,
+          DateTime.now().day, 23, 59, 59));
 
   @override
   void initState() {
@@ -32,8 +33,6 @@ class _DaftarPengeluaranScreenState extends State<DaftarPengeluaranScreen> {
 
   Future<void> _loadExpense() async {
     final expenses = await _retrieveExpenses(currentDateRange);
-
-    print('Expenses (${expenses.length})');
 
     setState(() {
       expenseList.clear();

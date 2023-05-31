@@ -36,36 +36,24 @@ extension CategoryTypeExtension on CategoryType {
   String get displayName {
     switch (this) {
       case CategoryType.foodAndDrink:
-        return "foodAndDrink";
+        return "Makanan & Minuman";
       case CategoryType.transportation:
-        return "transportation";
+        return "Transportasi";
       case CategoryType.clothing:
-        return "clothing";
+        return "Pakaian";
       case CategoryType.entertainment:
-        return "entertainment";
+        return "Hiburan";
       case CategoryType.health:
-        return "health";
+        return "Kesehatan";
       case CategoryType.education:
-        return "education";
+        return "Edukasi";
       case CategoryType.others:
-        return "others";
+        return "Lainnya";
       case CategoryType.dailyNeeds:
-        return "dailyNeeds";
+        return "Kebutuhan Harian";
     }
   }
 }
-
-// map string to CategoryType
-final categoryTypeMap = {
-  'foodAndDrink': CategoryType.foodAndDrink,
-  'transportation': CategoryType.transportation,
-  'clothing': CategoryType.clothing,
-  'entertainment': CategoryType.entertainment,
-  'dailyNeeds': CategoryType.dailyNeeds,
-  'health': CategoryType.health,
-  'education': CategoryType.education,
-  'others': CategoryType.others,
-};
 
 class CategoryTypeModel {
   final CategoryType type;
@@ -75,4 +63,10 @@ class CategoryTypeModel {
     required this.type,
     required this.icon,
   });
+}
+
+class CategoryTypeUtils {
+  static CategoryType categoryFromName(String name) {
+    return CategoryType.values.firstWhere((element) => element.name == name);
+  }
 }

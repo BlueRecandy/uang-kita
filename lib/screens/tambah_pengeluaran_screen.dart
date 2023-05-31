@@ -99,7 +99,7 @@ class _TambahPengeluaranScreenState extends State<TambahPengeluaranScreen> {
             items: katagoriList,
             hint: 'Kategori',
             onChanged: (value) {
-              final category = categoryTypeMap.values
+              final category = CategoryType.values
                   .where((element) => element.displayName == value)
                   .first;
 
