@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:uang_kita/models/category_type_model.dart';
+import 'package:uang_kita/screens/daftar_tagihan_screen.dart';
 
 class TambahTagihanScreen extends StatefulWidget {
   const TambahTagihanScreen({Key? key}) : super(key: key);
@@ -173,6 +174,11 @@ class _TambahTagihanScreenState extends State<TambahTagihanScreen> {
                       print('Jumlah: $jumlah');
                       print('Jatuh Tempo: $_jatuhTempo');
                       print('Kategori: $kategori');
+
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const DaftarTagihanScreen()));
                     },
                     child: const Text('Tambah'))
               ],

@@ -20,7 +20,7 @@ class _UangKitaAppState extends State<UangKitaApp> {
 
   final _screens = [
     const DaftarPengeluaranScreen(),
-    const DaftarTagihanPage(),
+    const DaftarTagihanScreen(),
   ];
 
   BottomNavigationBarItem _buildNavbarItem(HeroIcons icon, String label) {
