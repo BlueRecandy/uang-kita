@@ -33,8 +33,6 @@ class _DaftarPengeluaranScreenState extends State<DaftarPengeluaranScreen> {
   Future<void> _loadExpense() async {
     final expenses = await _retrieveExpenses(currentDateRange);
 
-    print('Expenses (${expenses.length})');
-
     setState(() {
       expenseList.clear();
       expenseList.addAll(expenses);
