@@ -20,7 +20,7 @@ class ExpenseRepository implements IExpenseRepository {
   }
 
   @override
-  Future<void> insert(Database db, Map<String, dynamic> data) {
+  Future<void> insert(Database db, Map<String, dynamic> data) async {
     // validate data
     if (data['title'] == null ||
         data['category'] == null ||
@@ -28,13 +28,18 @@ class ExpenseRepository implements IExpenseRepository {
       throw Exception('Field title, category, dan amount kosong');
     }
 
-    data['date'] = DateTime.now().toIso8601String();
+    if (data['date'] == null) {
+      data['date'] = DateTime.now();
+    }
 
+    final date = data['date'] as DateTime;
+
+    data['date'] = date.toIso8601String();
     final category = data['category'] as CategoryType;
 
     data['category'] = category.name;
 
-    return db.insert(tableName, data);
+    await db.insert(tableName, data);
   }
 
   @override
