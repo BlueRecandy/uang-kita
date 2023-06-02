@@ -4,20 +4,15 @@ import 'package:heroicons/heroicons.dart';
 import 'package:sizer/sizer.dart';
 import 'package:uang_kita/screens/daftar_pengeluaran_screen.dart';
 import 'package:uang_kita/screens/daftar_tagihan_screen.dart';
-
-FlutterLocalNotificationsPlugin notificationsPlugin =
-    FlutterLocalNotificationsPlugin();
-
-const AndroidInitializationSettings initializationSettingsAndroid =
-    AndroidInitializationSettings('app_icon');
-
-const InitializationSettings initializationSettings =
-    InitializationSettings(android: initializationSettingsAndroid);
+import 'package:uang_kita/utils/notification_utils.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 void main() async {
+  tz.initializeTimeZones();
+
   WidgetsFlutterBinding.ensureInitialized();
 
-  await notificationsPlugin.initialize(initializationSettings);
+  await NotificationUtils.initialize();
 
   runApp(const UangKitaApp());
 }
@@ -74,24 +69,18 @@ class _UangKitaAppState extends State<UangKitaApp> {
     );
   }
 
-  void callNotification() async {
-    const AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails('your channel id', 'your channel name',
-            channelDescription: 'your channel description',
-            importance: Importance.max,
-            priority: Priority.high,
-            ticker: 'ticker');
-    const NotificationDetails notificationDetails =
-        NotificationDetails(android: androidNotificationDetails);
-    await notificationsPlugin.show(
-        0, 'plain title', 'plain body', notificationDetails,
-        payload: 'item x');
-  }
-
   @override
   void initState() {
     super.initState();
-    callNotification();
+
+    final notification = NotificationUtils.prepareNotification(
+        channelId: 'bills',
+        channelName: 'Bills',
+        channelDescription: 'Remind user of their bills');
+
+    NotificationUtils.scheduleNotification(
+        notification, DateTime.now().add(const Duration(seconds: 10)),
+        title: 'Bills Reminder', body: 'You have bills to pay');
   }
 
   @override
