@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:uang_kita/db/sqlite.dart';
 import 'package:uang_kita/models/category_type_model.dart';
+import 'package:uang_kita/utils/notification_utils.dart';
 
 class TambahTagihanScreen extends StatefulWidget {
   const TambahTagihanScreen({Key? key}) : super(key: key);
@@ -132,9 +133,36 @@ class _TambahTagihanScreenState extends State<TambahTagihanScreen> {
     return data;
   }
 
+  void scheduleBillsNotification() {
+    if (jatuhTempo == null) return;
+
+    final diffDays = jatuhTempo!.difference(DateTime.now()).inDays;
+    final isToday = diffDays == 0;
+
+    // Send notification at 8 AM if today, else send at 8 AM before due date
+    final sendAt = isToday
+        ? DateTime.now().add(const Duration(seconds: 30))
+        : DateTime(
+                jatuhTempo!.year, jatuhTempo!.month, jatuhTempo!.day, 8, 0, 0)
+            .subtract(const Duration(days: 1));
+
+    final jatuhTempoText = isToday
+        ? 'HARI INI'
+        : (diffDays == 1 ? 'BESOK' : 'dalam $diffDays hari');
+
+    NotificationUtils.scheduleNotification(
+        NotificationUtils.getBillsChannel(), sendAt,
+        title: 'Tagihan Jatuh Tempo',
+        body:
+            'Jangan lupa bayar tagihan ${_judulController.value.text} pada $jatuhTempoText');
+  }
+
   void showSuccessResponse() {
     ScaffoldMessenger.of(context)
         .showSnackBar(const SnackBar(content: Text('Tagihan ditambah')));
+
+    scheduleBillsNotification();
+
     Navigator.of(context).pop();
   }
 
