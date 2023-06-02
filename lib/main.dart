@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:sizer/sizer.dart';
+import 'package:timezone/data/latest.dart' as tz;
 import 'package:uang_kita/screens/daftar_pengeluaran_screen.dart';
 import 'package:uang_kita/screens/daftar_tagihan_screen.dart';
+import 'package:uang_kita/utils/notification_utils.dart';
 
-void main() {
+void main() async {
+  tz.initializeTimeZones();
+
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await NotificationUtils.initialize();
+
   runApp(const UangKitaApp());
 }
 
