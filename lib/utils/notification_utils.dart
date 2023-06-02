@@ -72,4 +72,11 @@ class NotificationUtils {
     await notificationsPlugin.show(id, title, body, notificationDetails,
         payload: payload);
   }
+
+  static NotificationDetails getBillsChannel() {
+    return prepareNotification(
+        channelId: 'bills',
+        channelName: 'Bills',
+        channelDescription: 'Remind user of their bills');
+  }
 }
