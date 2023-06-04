@@ -29,7 +29,7 @@ class _DateTimePickerState extends State<DateTimePicker> {
       alignment: Alignment.bottomLeft,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(width: 2, color: Color(0xffC5C5C5)),
+        border: Border.all(width: 2, color: const Color(0xffC5C5C5)),
       ),
       width: 300,
       child: TextButton(
